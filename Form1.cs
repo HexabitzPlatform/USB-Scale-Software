@@ -24,17 +24,28 @@ namespace ArrayMessaging
         {
             try { port.Open(); } catch { }
 
-            byte length = 5;
+            byte length = 0x05;
 
-            byte destination = 1;
-            byte source = 2;
+            byte destination = 0x01;
+            byte source = 0x02;
             byte M_C = 0x0A;    //code = 2602 to be represented in two bytes
             byte L_C = 0x2A;
-            byte crc = 75;
+            byte crc = 0x75;
 
             byte[] buffer = {length, destination, source, M_C, L_C, crc };
 
-            port.Write(buffer, 0, 1);
+            byte[] temp = new byte[1];
+
+            temp[0] = length;
+
+            port.Write(temp, 0, 1);
+            Thread.Sleep(1);
+
+            foreach (byte value in buffer)
+            {
+                temp[0] = value;
+                port.Write(temp, 0, 1);
+            }
         }
 
 
