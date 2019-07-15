@@ -32,6 +32,11 @@ namespace ArrayMessaging
             byte L_C = 0x2A;
             byte crc = 0x75;
 
+
+            uint period = uint.Parse(periodTB.Text);
+            uint time = uint.Parse(timeTB.Text);
+
+
             byte[] buffer = {length, destination, source, M_C, L_C, crc };
 
             byte[] temp = new byte[1];
@@ -51,12 +56,28 @@ namespace ArrayMessaging
 
         private void ZeroBTN_Click(object sender, EventArgs e)
         {
+            try { port.Open(); } catch { }
 
+            byte length = 0x05;
+
+            byte destination = 0x01;
+            byte source = 0x02;
+            byte M_C = 0x0A;    //code = 2620 to be represented in two bytes
+            byte L_C = 0x3C;
+            byte crc = 0x75;
         }
 
         private void CalibrationBTN_Click(object sender, EventArgs e)
         {
+            try { port.Open(); } catch { }
 
+            byte length = 0x05;
+
+            byte destination = 0x01;
+            byte source = 0x02;
+            byte M_C = 0x0A;    //code = 2621 to be represented in two bytes
+            byte L_C = 0x3D;
+            byte crc = 0x75;
         }
 
         private void StartBTN_Click(object sender, EventArgs e)
