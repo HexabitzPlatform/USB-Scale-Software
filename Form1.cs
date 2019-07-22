@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms;
@@ -10,6 +9,8 @@ namespace ArrayMessaging
     public partial class Form1 : Form
     {
         SerialPort port;
+
+        uint period, time;
         public Form1()
         {
             InitializeComponent();
@@ -20,84 +21,183 @@ namespace ArrayMessaging
 
         }
 
-        private void ConnectBTN_Click(object sender, EventArgs e)
+        private void readGramBTN_Click(object sender, EventArgs e)
         {
-            try { port.Open(); } catch { }
 
-            byte length = 0x05;
+            StopBTN_Click(sender, e);
+            Thread.Sleep(200);
+            byte length = 0x10;
 
             byte destination = 0x01;
-            byte source = 0x02;
-            byte M_C = 0x0A;    //code = 2602 to be represented in two bytes
-            byte L_C = 0x2A;
+            byte source = 0x00;
+            byte M_C = 0x0A;    //code = 2601 to be represented in two bytes
+            byte L_C = 0x29;
+            byte channel = 0x01;
+            byte module = 0x02;
+            byte modulePort = 0x06;
             byte crc = 0x75;
 
+            period = uint.Parse(periodTB.Text);
+            time = uint.Parse(timeTB.Text);
 
-            uint period = uint.Parse(periodTB.Text);
-            uint time = uint.Parse(timeTB.Text);
+            if (radioButton2.Checked)
+                channel = 0x02;
 
+            byte[] periodBytes = BitConverter.GetBytes(period);
+            byte[] timeBytes = BitConverter.GetBytes(time);
 
-            byte[] buffer = {length, destination, source, M_C, L_C, crc };
+            byte[] buffer = {destination,
+                            source,
+                            M_C,
+                            L_C,
+                            channel,
+                            periodBytes[3],
+                            periodBytes[2],
+                            periodBytes[1],
+                            periodBytes[0],
+                            timeBytes[3],
+                            timeBytes[2],
+                            timeBytes[1],
+                            timeBytes[0],
+                            modulePort,
+                            module,
+                            crc};
+
+            try { port.Open(); } catch { }
 
             byte[] temp = new byte[1];
-
             temp[0] = length;
-
             port.Write(temp, 0, 1);
+
             Thread.Sleep(1);
 
-            foreach (byte value in buffer)
-            {
-                temp[0] = value;
-                port.Write(temp, 0, 1);
-            }
+            port.Write(buffer, 0, 16);
+
+            receive();
+        }
+
+        private void ReadKGBTN_Click(object sender, EventArgs e)
+        {
+
+            StopBTN_Click(sender, e);
+            Thread.Sleep(200);
+            byte length = 0x10;
+
+            byte destination = 0x01;
+            byte source = 0x00;
+            byte M_C = 0x0A;    //code = 2602 to be represented in two bytes
+            byte L_C = 0x2A;
+            byte channel = 0x01;
+            byte module = 0x02;
+            byte modulePort = 0x06;
+            byte crc = 0x75;
+
+            period = uint.Parse(periodTB.Text);
+            time = uint.Parse(timeTB.Text);
+
+            if (radioButton2.Checked)
+                channel = 0x02;
+
+            byte[] periodBytes = BitConverter.GetBytes(period);
+            byte[] timeBytes = BitConverter.GetBytes(time);
+
+            byte[] buffer = {destination,
+                            source,
+                            M_C,
+                            L_C,
+                            channel,
+                            periodBytes[3],
+                            periodBytes[2],
+                            periodBytes[1],
+                            periodBytes[0],
+                            timeBytes[3],
+                            timeBytes[2],
+                            timeBytes[1],
+                            timeBytes[0],
+                            modulePort,
+                            module,
+                            crc};
+
+            try { port.Open(); } catch { }
+
+            byte[] temp = new byte[1];
+            temp[0] = length;
+            port.Write(temp, 0, 1);
+
+            Thread.Sleep(1);
+
+            port.Write(buffer, 0, 16);
+
+            receive();
         }
 
 
         private void ZeroBTN_Click(object sender, EventArgs e)
         {
-            try { port.Open(); } catch { }
-
-            byte length = 0x05;
+            byte length = 0x06;
 
             byte destination = 0x01;
-            byte source = 0x02;
-            byte M_C = 0x0A;    //code = 2620 to be represented in two bytes
-            byte L_C = 0x3C;
+            byte source = 0x00;
+            byte M_C = 0x0A;    //code = 2610 to be represented in two bytes
+            byte L_C = 0x32;
+            byte channel = 0x01;
             byte crc = 0x75;
-        }
 
-        private void CalibrationBTN_Click(object sender, EventArgs e)
-        {
             try { port.Open(); } catch { }
 
-            byte length = 0x05;
+            byte[] temp = new byte[1];
+            temp[0] = length;
+            port.Write(temp, 0, 1);
 
-            byte destination = 0x01;
-            byte source = 0x02;
-            byte M_C = 0x0A;    //code = 2621 to be represented in two bytes
-            byte L_C = 0x3D;
-            byte crc = 0x75;
-        }
+            Thread.Sleep(1);
 
-        private void StartBTN_Click(object sender, EventArgs e)
-        {
+            byte[] buffer = {destination,
+                            source,
+                            M_C,
+                            L_C,
+                            channel,
+                            crc};
+
+            port.Write(buffer, 0, 6);
+            displayLBL.Text = "00000";
+            testBufferTB.Clear();
         }
 
         private void StopBTN_Click(object sender, EventArgs e)
         {
+            try { port.Close(); } catch { };
+            byte length = 0x05;
+
+            byte destination = 0x01;
+            byte source = 0x00;
+            byte M_C = 0x0A;    //code = 2605 to be represented in two bytes
+            byte L_C = 0x2D;
+            byte crc = 0x75;
+
+            try { port.Open(); } catch { }
+
+            byte[] temp = new byte[1];
+            temp[0] = length;
+            port.Write(temp, 0, 1);
+
+            Thread.Sleep(1);
+
+            byte[] buffer = {destination,
+                            source,
+                            M_C,
+                            L_C,
+                            crc};
+
+            port.Write(buffer, 0, 5);
+
+            receive();
+
         }
 
-        private void OpenBTN_Click(object sender, EventArgs e)
-        {
-            SerialPortProgram();
-        }
-
-        private void SerialPortProgram()
+        private void receive()
         {
             port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
             try { port.Open(); } catch { }
-     
         }
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
@@ -114,11 +214,21 @@ namespace ArrayMessaging
                 string D3 = to_right_hex(buffer[3].ToString("X"));
                 string length = D3 + D2 + D1 + D0;
 
-                uint length_number = uint.Parse(length, System.Globalization.NumberStyles.HexNumber);
-                displayLBL.Text = length_number + "";
+                try
+                {
+
+                    uint length_number = uint.Parse(length, System.Globalization.NumberStyles.HexNumber);
+                    displayLBL.Text = length_number + "";
+                }
+                catch
+                {
+                    displayLBL.Text = "error" + "";
+                }
 
                 testBufferTB.Text += "Total bytes: " + bytes_count + "\n";
                 string final_string = "";
+
+
                 foreach (byte value in buffer)
                 {
                     final_string += value + "\n";
@@ -139,6 +249,17 @@ namespace ArrayMessaging
                 case "F": hex = "0" + hex; break;
             }
             return hex;
+        }
+       
+        private void IfnCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (timeTB.Enabled)
+            {
+                timeTB.Enabled = false;
+                time = 0xFFFFFFFF;
+            }
+            else
+                timeTB.Enabled = true;
         }
     }
 }
