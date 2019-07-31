@@ -14,24 +14,35 @@ namespace ArrayMessaging
         public Form1()
         {
             InitializeComponent();
-            port = new SerialPort("COM7", 921600, Parity.None, 8, StopBits.One);
+            
+            port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            unitCB.SelectedIndex = 0;
         }
 
         private void readBTN_Click(object sender, EventArgs e)
         {
             port.Dispose();
-            port = new SerialPort("COM7", 921600, Parity.None, 8, StopBits.One);
+            port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
 
             byte length = 0x10;
 
             byte destination = 0x01;
             byte source = 0x00;
             byte M_C = 0x0A;    //code = 2601 to be represented in two bytes
+
             byte L_C = 0x29;
+            switch(unitCB.SelectedItem)
+            {
+                case "Gram": L_C = 0x29; break;
+                case "Kg": L_C = 0x29; break;
+                case "Ounces": L_C = 0x2B; break;
+                case "Pounds": L_C = 0x2C; break;
+                default: break;
+            }
+
             byte channel = 0x01;
             byte module = 0x02;
             byte modulePort = 0x06;
@@ -48,57 +59,8 @@ namespace ArrayMessaging
             byte[] periodBytes = BitConverter.GetBytes(period);
             byte[] timeBytes = BitConverter.GetBytes(time);
 
-            byte[] buffer = {destination,
-                            source,
-                            M_C,
-                            L_C,
-                            channel,
-                            periodBytes[3],
-                            periodBytes[2],
-                            periodBytes[1],
-                            periodBytes[0],
-                            timeBytes[3],
-                            timeBytes[2],
-                            timeBytes[1],
-                            timeBytes[0],
-                            modulePort,
-                            module,
-                            crc};
-
-            try { port.Open(); } catch { }
-
-            byte[] temp = new byte[1];
-            temp[0] = length;
-            port.Write(temp, 0, 1);
-
-            Thread.Sleep(1);
-
-            port.Write(buffer, 0, 16);
-
-            receive();
-        }
-
-        private void ReadKGBTN_Click(object sender, EventArgs e)
-        {
-            byte length = 0x10;
-
-            byte destination = 0x01;
-            byte source = 0x00;
-            byte M_C = 0x0A;    //code = 2601 to be represented in two bytes
-            byte L_C = 0x2A;
-            byte channel = 0x01;
-            byte module = 0x02;
-            byte modulePort = 0x06;
-            byte crc = 0x75;
-
-            period = uint.Parse(periodTB.Text);
-            time = uint.Parse(timeTB.Text);
-
-            if (radioButton2.Checked)
-                channel = 0x02;
-
-            byte[] periodBytes = BitConverter.GetBytes(period);
-            byte[] timeBytes = BitConverter.GetBytes(time);
+            if (!timeTB.Enabled)
+                time = 0xFFFFFFFF;    // infinte time code
 
             byte[] buffer = {destination,
                             source,
@@ -117,7 +79,7 @@ namespace ArrayMessaging
                             module,
                             crc};
 
-            try { port.Open(); } catch { }
+            try { port.Open(); } catch { MessageBox.Show("Connection Error!"); return; }
 
             byte[] temp = new byte[1];
             temp[0] = length;
@@ -157,7 +119,6 @@ namespace ArrayMessaging
                             crc};
 
             port.Write(buffer, 0, 6);
-            displayLBL.Text = "00000";
             testBufferTB.Clear();
         }
 
@@ -192,7 +153,7 @@ namespace ArrayMessaging
             sevenSegmentArray1.Value = "STOPED";
             connectionLBL.Text = "Stopped";
             port.Dispose();
-            port = new SerialPort("COM7", 921600, Parity.None, 8, StopBits.One);
+            port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
 
         }
 
@@ -218,17 +179,21 @@ namespace ArrayMessaging
 
                 try
                 {
-
                     uint length_number = uint.Parse(length, System.Globalization.NumberStyles.HexNumber);
-                    if (KGRB.Checked)
-                        length_number /= 1000;
-                    displayLBL.Text = length_number + "";
-                    sevenSegmentArray1.Value = length_number + "";
-                    connectionLBL.Text = "Receiving...";
+                    if(unitCB.SelectedItem.ToString() == "Kg")
+                    {
+                        float kg = length_number / 1000f;
+                        sevenSegmentArray1.Value = kg + "";
+                        connectionLBL.Text = "Receiving...";
+                    }
+                    else
+                    {
+                        sevenSegmentArray1.Value = length_number + "";
+                        connectionLBL.Text = "Receiving...";
+                    }
                 }
                 catch
                 {
-                    displayLBL.Text = "Error";
                     connectionLBL.Text = "Error!";
                 }
 
@@ -258,12 +223,21 @@ namespace ArrayMessaging
             return hex;
         }
 
+        string weight = "";
+
+        private void UnitCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            StopBTN_Click(sender, e);
+            weight = unitCB.SelectedItem.ToString();
+            weightLBL.Text = weight;
+            readBTN_Click(sender, e);
+        }
+
         private void IfnCB_CheckedChanged(object sender, EventArgs e)
         {
             if (timeTB.Enabled)
             {
                 timeTB.Enabled = false;
-                time = 0xFFFFFFFF;
             }
             else
                 timeTB.Enabled = true;

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.readBTN = new System.Windows.Forms.Button();
-            this.displayLBL = new System.Windows.Forms.Label();
             this.zeroBTN = new System.Windows.Forms.Button();
             this.periodTB = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,12 +41,14 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.sevenSegmentArray1 = new DmitryBrant.CustomControls.SevenSegmentArray();
             this.ifnCB = new System.Windows.Forms.CheckBox();
-            this.KGRB = new System.Windows.Forms.RadioButton();
-            this.grameRB = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox1.SuspendLayout();
+            this.unitCB = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.weightLBL = new System.Windows.Forms.Label();
+            this.COM = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.COM)).BeginInit();
             this.SuspendLayout();
             // 
             // readBTN
@@ -55,25 +56,13 @@
             this.readBTN.BackColor = System.Drawing.Color.Lime;
             this.readBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.readBTN.ForeColor = System.Drawing.Color.White;
-            this.readBTN.Location = new System.Drawing.Point(49, 413);
+            this.readBTN.Location = new System.Drawing.Point(121, 413);
             this.readBTN.Name = "readBTN";
             this.readBTN.Size = new System.Drawing.Size(184, 73);
             this.readBTN.TabIndex = 0;
             this.readBTN.Text = "Read";
             this.readBTN.UseVisualStyleBackColor = false;
             this.readBTN.Click += new System.EventHandler(this.readBTN_Click);
-            // 
-            // displayLBL
-            // 
-            this.displayLBL.AutoSize = true;
-            this.displayLBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayLBL.ForeColor = System.Drawing.Color.Red;
-            this.displayLBL.Location = new System.Drawing.Point(480, 507);
-            this.displayLBL.Name = "displayLBL";
-            this.displayLBL.Size = new System.Drawing.Size(302, 69);
-            this.displayLBL.TabIndex = 1;
-            this.displayLBL.Text = "77777777";
-            this.displayLBL.Visible = false;
             // 
             // zeroBTN
             // 
@@ -91,7 +80,7 @@
             // periodTB
             // 
             this.periodTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.periodTB.Location = new System.Drawing.Point(211, 234);
+            this.periodTB.Location = new System.Drawing.Point(121, 236);
             this.periodTB.Name = "periodTB";
             this.periodTB.Size = new System.Drawing.Size(143, 34);
             this.periodTB.TabIndex = 4;
@@ -101,7 +90,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(206, 202);
+            this.label1.Location = new System.Drawing.Point(121, 204);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 29);
             this.label1.TabIndex = 5;
@@ -111,7 +100,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(410, 202);
+            this.label2.Location = new System.Drawing.Point(326, 204);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 29);
             this.label2.TabIndex = 7;
@@ -120,17 +109,17 @@
             // timeTB
             // 
             this.timeTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeTB.Location = new System.Drawing.Point(415, 234);
+            this.timeTB.Location = new System.Drawing.Point(331, 236);
             this.timeTB.Name = "timeTB";
             this.timeTB.Size = new System.Drawing.Size(143, 34);
             this.timeTB.TabIndex = 6;
-            this.timeTB.Text = "5000";
+            this.timeTB.Text = "50000";
             // 
             // connectionLBL
             // 
             this.connectionLBL.AutoSize = true;
             this.connectionLBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.connectionLBL.Location = new System.Drawing.Point(44, 515);
+            this.connectionLBL.Location = new System.Drawing.Point(121, 515);
             this.connectionLBL.Name = "connectionLBL";
             this.connectionLBL.Size = new System.Drawing.Size(207, 29);
             this.connectionLBL.TabIndex = 11;
@@ -141,7 +130,7 @@
             this.stopBTN.BackColor = System.Drawing.Color.Red;
             this.stopBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stopBTN.ForeColor = System.Drawing.Color.White;
-            this.stopBTN.Location = new System.Drawing.Point(576, 413);
+            this.stopBTN.Location = new System.Drawing.Point(508, 413);
             this.stopBTN.Name = "stopBTN";
             this.stopBTN.Size = new System.Drawing.Size(184, 73);
             this.stopBTN.TabIndex = 14;
@@ -151,9 +140,9 @@
             // 
             // testBufferTB
             // 
-            this.testBufferTB.Location = new System.Drawing.Point(36, 257);
+            this.testBufferTB.Location = new System.Drawing.Point(803, 527);
             this.testBufferTB.Name = "testBufferTB";
-            this.testBufferTB.Size = new System.Drawing.Size(123, 103);
+            this.testBufferTB.Size = new System.Drawing.Size(54, 46);
             this.testBufferTB.TabIndex = 15;
             this.testBufferTB.Text = "";
             this.testBufferTB.Visible = false;
@@ -184,7 +173,7 @@
             // 
             this.sevenSegmentArray1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sevenSegmentArray1.ArrayCount = 6;
+            this.sevenSegmentArray1.ArrayCount = 8;
             this.sevenSegmentArray1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.sevenSegmentArray1.ColorBackground = System.Drawing.SystemColors.Control;
             this.sevenSegmentArray1.ColorDark = System.Drawing.SystemColors.Control;
@@ -193,10 +182,10 @@
             this.sevenSegmentArray1.ElementPadding = new System.Windows.Forms.Padding(6, 4, 4, 4);
             this.sevenSegmentArray1.ElementWidth = 10;
             this.sevenSegmentArray1.ItalicFactor = -0.1F;
-            this.sevenSegmentArray1.Location = new System.Drawing.Point(193, 44);
+            this.sevenSegmentArray1.Location = new System.Drawing.Point(121, 40);
             this.sevenSegmentArray1.Margin = new System.Windows.Forms.Padding(4);
             this.sevenSegmentArray1.Name = "sevenSegmentArray1";
-            this.sevenSegmentArray1.Size = new System.Drawing.Size(464, 109);
+            this.sevenSegmentArray1.Size = new System.Drawing.Size(533, 109);
             this.sevenSegmentArray1.TabIndex = 21;
             this.sevenSegmentArray1.TabStop = false;
             this.sevenSegmentArray1.Value = "";
@@ -205,7 +194,7 @@
             // 
             this.ifnCB.AutoSize = true;
             this.ifnCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.ifnCB.Location = new System.Drawing.Point(576, 239);
+            this.ifnCB.Location = new System.Drawing.Point(492, 241);
             this.ifnCB.Name = "ifnCB";
             this.ifnCB.Size = new System.Drawing.Size(114, 29);
             this.ifnCB.TabIndex = 17;
@@ -213,57 +202,88 @@
             this.ifnCB.UseVisualStyleBackColor = true;
             this.ifnCB.CheckedChanged += new System.EventHandler(this.IfnCB_CheckedChanged);
             // 
-            // KGRB
-            // 
-            this.KGRB.AutoSize = true;
-            this.KGRB.Location = new System.Drawing.Point(29, 59);
-            this.KGRB.Name = "KGRB";
-            this.KGRB.Size = new System.Drawing.Size(46, 21);
-            this.KGRB.TabIndex = 23;
-            this.KGRB.Text = "Kg";
-            this.KGRB.UseVisualStyleBackColor = true;
-            // 
-            // grameRB
-            // 
-            this.grameRB.AutoSize = true;
-            this.grameRB.Checked = true;
-            this.grameRB.Location = new System.Drawing.Point(29, 32);
-            this.grameRB.Name = "grameRB";
-            this.grameRB.Size = new System.Drawing.Size(64, 21);
-            this.grameRB.TabIndex = 22;
-            this.grameRB.TabStop = true;
-            this.grameRB.Text = "Gram";
-            this.grameRB.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.grameRB);
-            this.groupBox1.Controls.Add(this.KGRB);
-            this.groupBox1.Location = new System.Drawing.Point(469, 288);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
-            this.groupBox1.TabIndex = 24;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Weight unit";
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.radioButton1);
             this.groupBox2.Controls.Add(this.radioButton2);
-            this.groupBox2.Location = new System.Drawing.Point(205, 288);
+            this.groupBox2.Location = new System.Drawing.Point(406, 297);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(200, 100);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Channel";
             // 
+            // unitCB
+            // 
+            this.unitCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.unitCB.FormattingEnabled = true;
+            this.unitCB.Items.AddRange(new object[] {
+            "Gram",
+            "Kg",
+            "Ounces",
+            "Pounds"});
+            this.unitCB.Location = new System.Drawing.Point(121, 329);
+            this.unitCB.Name = "unitCB";
+            this.unitCB.Size = new System.Drawing.Size(229, 37);
+            this.unitCB.TabIndex = 24;
+            this.unitCB.Text = "Gram";
+            this.unitCB.SelectedIndexChanged += new System.EventHandler(this.UnitCB_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(121, 297);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(142, 29);
+            this.label3.TabIndex = 26;
+            this.label3.Text = "Weight Unit:";
+            // 
+            // weightLBL
+            // 
+            this.weightLBL.AutoSize = true;
+            this.weightLBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weightLBL.ForeColor = System.Drawing.Color.Red;
+            this.weightLBL.Location = new System.Drawing.Point(661, 74);
+            this.weightLBL.Name = "weightLBL";
+            this.weightLBL.Size = new System.Drawing.Size(129, 51);
+            this.weightLBL.TabIndex = 27;
+            this.weightLBL.Text = "Gram";
+            // 
+            // COM
+            // 
+            this.COM.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.COM.Location = new System.Drawing.Point(508, 522);
+            this.COM.Name = "COM";
+            this.COM.Size = new System.Drawing.Size(60, 36);
+            this.COM.TabIndex = 28;
+            this.COM.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(433, 525);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(69, 29);
+            this.label4.TabIndex = 29;
+            this.label4.Text = "COM";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 585);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.COM);
+            this.Controls.Add(this.weightLBL);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.unitCB);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.sevenSegmentArray1);
             this.Controls.Add(this.ifnCB);
             this.Controls.Add(this.testBufferTB);
@@ -274,7 +294,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.periodTB);
             this.Controls.Add(this.zeroBTN);
-            this.Controls.Add(this.displayLBL);
             this.Controls.Add(this.readBTN);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -282,10 +301,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Array Messaging";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.COM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -294,7 +312,6 @@
         #endregion
 
         private System.Windows.Forms.Button readBTN;
-        private System.Windows.Forms.Label displayLBL;
         private System.Windows.Forms.Button zeroBTN;
         private System.Windows.Forms.TextBox periodTB;
         private System.Windows.Forms.Label label1;
@@ -307,10 +324,12 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private DmitryBrant.CustomControls.SevenSegmentArray sevenSegmentArray1;
         private System.Windows.Forms.CheckBox ifnCB;
-        private System.Windows.Forms.RadioButton KGRB;
-        private System.Windows.Forms.RadioButton grameRB;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ComboBox unitCB;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label weightLBL;
+        private System.Windows.Forms.NumericUpDown COM;
+        private System.Windows.Forms.Label label4;
     }
 }
 
