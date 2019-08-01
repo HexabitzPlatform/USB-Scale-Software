@@ -36,7 +36,6 @@
             this.timeTB = new System.Windows.Forms.TextBox();
             this.connectionLBL = new System.Windows.Forms.Label();
             this.stopBTN = new System.Windows.Forms.Button();
-            this.testBufferTB = new System.Windows.Forms.RichTextBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.sevenSegmentArray1 = new DmitryBrant.CustomControls.SevenSegmentArray();
@@ -47,8 +46,11 @@
             this.weightLBL = new System.Windows.Forms.Label();
             this.COM = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // readBTN
@@ -137,15 +139,6 @@
             this.stopBTN.Text = "Stop";
             this.stopBTN.UseVisualStyleBackColor = false;
             this.stopBTN.Click += new System.EventHandler(this.StopBTN_Click);
-            // 
-            // testBufferTB
-            // 
-            this.testBufferTB.Location = new System.Drawing.Point(803, 527);
-            this.testBufferTB.Name = "testBufferTB";
-            this.testBufferTB.Size = new System.Drawing.Size(54, 46);
-            this.testBufferTB.TabIndex = 15;
-            this.testBufferTB.Text = "";
-            this.testBufferTB.Visible = false;
             // 
             // radioButton1
             // 
@@ -273,11 +266,32 @@
             this.label4.TabIndex = 29;
             this.label4.Text = "COM";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(659, 541);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(78, 17);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "Powerd by ";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ArrayMessaging.Properties.Resources.logo;
+            this.pictureBox1.Location = new System.Drawing.Point(743, 525);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 31;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 585);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.COM);
             this.Controls.Add(this.weightLBL);
@@ -286,7 +300,6 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.sevenSegmentArray1);
             this.Controls.Add(this.ifnCB);
-            this.Controls.Add(this.testBufferTB);
             this.Controls.Add(this.stopBTN);
             this.Controls.Add(this.connectionLBL);
             this.Controls.Add(this.label2);
@@ -304,6 +317,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,7 +333,6 @@
         private System.Windows.Forms.TextBox timeTB;
         private System.Windows.Forms.Label connectionLBL;
         private System.Windows.Forms.Button stopBTN;
-        private System.Windows.Forms.RichTextBox testBufferTB;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
         private DmitryBrant.CustomControls.SevenSegmentArray sevenSegmentArray1;
@@ -330,6 +343,8 @@
         private System.Windows.Forms.Label weightLBL;
         private System.Windows.Forms.NumericUpDown COM;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

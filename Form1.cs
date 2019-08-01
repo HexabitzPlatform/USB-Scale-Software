@@ -14,7 +14,6 @@ namespace ArrayMessaging
         public Form1()
         {
             InitializeComponent();
-            
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -32,8 +31,7 @@ namespace ArrayMessaging
             byte destination = 0x01;
             byte source = 0x00;
             byte M_C = 0x0A;    //code = 2601 to be represented in two bytes
-
-            byte L_C = 0x29;
+            byte L_C = 0x29;     // default is gram reading
             switch(unitCB.SelectedItem)
             {
                 case "Gram": L_C = 0x29; break;
@@ -53,8 +51,6 @@ namespace ArrayMessaging
 
             if (radioButton2.Checked)
                 channel = 0x02;
-            else
-                channel = 0x01;
 
             byte[] periodBytes = BitConverter.GetBytes(period);
             byte[] timeBytes = BitConverter.GetBytes(time);
@@ -79,11 +75,11 @@ namespace ArrayMessaging
                             module,
                             crc};
 
-            try { port.Open(); } catch { MessageBox.Show("Connection Error!"); return; }
+            try { port.Open(); } catch {  }
 
             byte[] temp = new byte[1];
             temp[0] = length;
-            port.Write(temp, 0, 1);
+            try { port.Write(temp, 0, 1); } catch { MessageBox.Show("Connection Error"); return; }
 
             Thread.Sleep(1);
 
@@ -107,7 +103,7 @@ namespace ArrayMessaging
 
             byte[] temp = new byte[1];
             temp[0] = length;
-            port.Write(temp, 0, 1);
+            try { port.Write(temp, 0, 1); } catch { MessageBox.Show("Connection Error"); return; }
 
             Thread.Sleep(1);
 
@@ -119,7 +115,6 @@ namespace ArrayMessaging
                             crc};
 
             port.Write(buffer, 0, 6);
-            testBufferTB.Clear();
         }
 
         private void StopBTN_Click(object sender, EventArgs e)
@@ -133,11 +128,11 @@ namespace ArrayMessaging
             byte L_C = 0x2D;
             byte crc = 0x75;
 
-            try { port.Open(); } catch { }
+            try { port.Open(); } catch {  }
 
             byte[] temp = new byte[1];
             temp[0] = length;
-            port.Write(temp, 0, 1);
+            try { port.Write(temp, 0, 1); } catch { MessageBox.Show("Connection Error"); return; }
 
             Thread.Sleep(1);
 
@@ -196,16 +191,6 @@ namespace ArrayMessaging
                 {
                     connectionLBL.Text = "Error!";
                 }
-
-                testBufferTB.Text += "Total bytes: " + bytes_count + "\n";
-                string final_string = "";
-
-
-                foreach (byte value in buffer)
-                {
-                    final_string += value + "\n";
-                }
-                testBufferTB.Text = final_string;
             });
         }
 
@@ -236,12 +221,9 @@ namespace ArrayMessaging
         private void IfnCB_CheckedChanged(object sender, EventArgs e)
         {
             if (timeTB.Enabled)
-            {
                 timeTB.Enabled = false;
-            }
             else
                 timeTB.Enabled = true;
-                
         }
     }
 }
