@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 
-namespace ArrayMessaging
+namespace HexabitzScale
 {
     public partial class Form1 : Form
     {

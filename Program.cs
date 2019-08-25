@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ArrayMessaging
+namespace HexabitzScale
 {
     static class Program
     {

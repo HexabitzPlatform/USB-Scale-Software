@@ -1,4 +1,4 @@
-﻿namespace ArrayMessaging
+﻿namespace HexabitzScale
 {
     partial class Form1
     {
@@ -277,7 +277,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::ArrayMessaging.Properties.Resources.logo;
+            this.pictureBox1.Image = global::HexabitzScale.Properties.Resources.logo;
             this.pictureBox1.Location = new System.Drawing.Point(743, 525);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 50);
@@ -312,7 +312,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Array Messaging";
+            this.Text = "Hexabitz Scale";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();

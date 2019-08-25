@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ArrayMessaging.Properties {
+namespace HexabitzScale.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
