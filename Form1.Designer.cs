@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.readBTN = new System.Windows.Forms.Button();
             this.zeroBTN = new System.Windows.Forms.Button();
             this.periodTB = new System.Windows.Forms.TextBox();
@@ -38,7 +39,6 @@
             this.stopBTN = new System.Windows.Forms.Button();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.sevenSegmentArray1 = new DmitryBrant.CustomControls.SevenSegmentArray();
             this.ifnCB = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.unitCB = new System.Windows.Forms.ComboBox();
@@ -48,6 +48,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.sevenSegmentArray1 = new DmitryBrant.CustomControls.SevenSegmentArray();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -162,27 +163,6 @@
             this.radioButton2.Text = "Chennel 2";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // sevenSegmentArray1
-            // 
-            this.sevenSegmentArray1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sevenSegmentArray1.ArrayCount = 8;
-            this.sevenSegmentArray1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.sevenSegmentArray1.ColorBackground = System.Drawing.SystemColors.Control;
-            this.sevenSegmentArray1.ColorDark = System.Drawing.SystemColors.Control;
-            this.sevenSegmentArray1.ColorLight = System.Drawing.Color.Red;
-            this.sevenSegmentArray1.DecimalShow = true;
-            this.sevenSegmentArray1.ElementPadding = new System.Windows.Forms.Padding(6, 4, 4, 4);
-            this.sevenSegmentArray1.ElementWidth = 10;
-            this.sevenSegmentArray1.ItalicFactor = -0.1F;
-            this.sevenSegmentArray1.Location = new System.Drawing.Point(121, 40);
-            this.sevenSegmentArray1.Margin = new System.Windows.Forms.Padding(4);
-            this.sevenSegmentArray1.Name = "sevenSegmentArray1";
-            this.sevenSegmentArray1.Size = new System.Drawing.Size(533, 109);
-            this.sevenSegmentArray1.TabIndex = 21;
-            this.sevenSegmentArray1.TabStop = false;
-            this.sevenSegmentArray1.Value = "";
-            // 
             // ifnCB
             // 
             this.ifnCB.AutoSize = true;
@@ -285,6 +265,27 @@
             this.pictureBox1.TabIndex = 31;
             this.pictureBox1.TabStop = false;
             // 
+            // sevenSegmentArray1
+            // 
+            this.sevenSegmentArray1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sevenSegmentArray1.ArrayCount = 8;
+            this.sevenSegmentArray1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.sevenSegmentArray1.ColorBackground = System.Drawing.SystemColors.Control;
+            this.sevenSegmentArray1.ColorDark = System.Drawing.SystemColors.Control;
+            this.sevenSegmentArray1.ColorLight = System.Drawing.Color.Red;
+            this.sevenSegmentArray1.DecimalShow = true;
+            this.sevenSegmentArray1.ElementPadding = new System.Windows.Forms.Padding(6, 4, 4, 4);
+            this.sevenSegmentArray1.ElementWidth = 10;
+            this.sevenSegmentArray1.ItalicFactor = -0.1F;
+            this.sevenSegmentArray1.Location = new System.Drawing.Point(121, 40);
+            this.sevenSegmentArray1.Margin = new System.Windows.Forms.Padding(4);
+            this.sevenSegmentArray1.Name = "sevenSegmentArray1";
+            this.sevenSegmentArray1.Size = new System.Drawing.Size(533, 109);
+            this.sevenSegmentArray1.TabIndex = 21;
+            this.sevenSegmentArray1.TabStop = false;
+            this.sevenSegmentArray1.Value = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -309,6 +310,7 @@
             this.Controls.Add(this.zeroBTN);
             this.Controls.Add(this.readBTN);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
