@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HexabitzScale.Properties {
+namespace USBScaleSoftware.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
