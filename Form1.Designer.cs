@@ -257,7 +257,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::HexabitzScale.Properties.Resources.logo;
+            this.pictureBox1.Image = global::USBScaleSoftware.Properties.Resources.logo;
             this.pictureBox1.Location = new System.Drawing.Point(743, 525);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 50);
