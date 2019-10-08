@@ -49,13 +49,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.sevenSegmentArray1 = new DmitryBrant.CustomControls.SevenSegmentArray();
-            this.startBTN = new System.Windows.Forms.Button();
-            this.crcLBL = new System.Windows.Forms.Label();
-            this.polyTB = new System.Windows.Forms.NumericUpDown();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.polyTB)).BeginInit();
             this.SuspendLayout();
             // 
             // readBTN
@@ -156,6 +152,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Channel 1";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -166,6 +163,7 @@
             this.radioButton2.TabIndex = 19;
             this.radioButton2.Text = "Chennel 2";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.RadioButton2_CheckedChanged);
             // 
             // ifnCB
             // 
@@ -290,36 +288,11 @@
             this.sevenSegmentArray1.TabStop = false;
             this.sevenSegmentArray1.Value = "";
             // 
-            // startBTN
-            // 
-            this.startBTN.Location = new System.Drawing.Point(0, 0);
-            this.startBTN.Name = "startBTN";
-            this.startBTN.Size = new System.Drawing.Size(75, 23);
-            this.startBTN.TabIndex = 1;
-            // 
-            // crcLBL
-            // 
-            this.crcLBL.Location = new System.Drawing.Point(0, 0);
-            this.crcLBL.Name = "crcLBL";
-            this.crcLBL.Size = new System.Drawing.Size(100, 23);
-            this.crcLBL.TabIndex = 0;
-            // 
-            // polyTB
-            // 
-            this.polyTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.polyTB.Location = new System.Drawing.Point(680, 232);
-            this.polyTB.Name = "polyTB";
-            this.polyTB.Size = new System.Drawing.Size(120, 38);
-            this.polyTB.TabIndex = 33;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 585);
-            this.Controls.Add(this.polyTB);
-            this.Controls.Add(this.crcLBL);
-            this.Controls.Add(this.startBTN);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -349,7 +322,6 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.polyTB)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,9 +349,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button startBTN;
-        private System.Windows.Forms.Label crcLBL;
-        private System.Windows.Forms.NumericUpDown polyTB;
     }
 }
 

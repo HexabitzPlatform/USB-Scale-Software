@@ -43,46 +43,81 @@ namespace USBScaleSoftware
             switch (unitCB.SelectedItem)
             {
                 case "Gram": L_C = 0x6D; break; //code = 1901 ; 076D
-                case "Kg": L_C = 0x6E; crc = 0x64;  break; //code = 1902
+                case "Kg": L_C = 0x6E; crc = 0x64; break; //code = 1902
                 case "Ounces": L_C = 0x6F; crc = 0x38; break; //code = 1903
                 case "Pounds": L_C = 0x70; crc = 0x63; break; //code = 1904
                 default: break;
             }
 
-            
+
             byte modulePort = 0x03;
             byte module = 0x01;
-            
+
 
             try { period = uint.Parse(periodTB.Text); } catch { MessageBox.Show("Check period input!"); return; }
-            try { time = uint.Parse(timeTB.Text); } catch { MessageBox.Show("Check time input!"); return; }
 
-            if (radioButton2.Checked)
-                channel = 0x02;
+            if (timeTB.Enabled)
+                try { time = uint.Parse(timeTB.Text); } catch { MessageBox.Show("Check time input!"); return; }
+            else
+                time = 0xFFFFFFFF;    // infinte time code
+
 
             byte[] periodBytes = BitConverter.GetBytes(period);
             byte[] timeBytes = BitConverter.GetBytes(time);
 
-            if (!timeTB.Enabled)
-                time = 0xFFFFFFFF;    // infinte time code
 
             byte[] buffer = {
+                            H,
+                            Z,
+                            length,
                             destination,
+
                             source,
                             options,
-                            M_C,
                             L_C,
+                            M_C,
+
                             channel,
                             periodBytes[3],
                             periodBytes[2],
                             periodBytes[1],
+
                             periodBytes[0],
                             timeBytes[3],
                             timeBytes[2],
                             timeBytes[1],
+
                             timeBytes[0],
                             modulePort,
                             module};
+
+            byte[] buffer_organized = {
+                            destination,
+                            length,
+                            Z,
+                            H,
+
+                            M_C,
+                            L_C,
+                            options,
+                            source,
+
+                            periodBytes[1],
+                            periodBytes[2],
+                            periodBytes[3],
+                            channel,
+
+                            timeBytes[1],
+                            timeBytes[2],
+                            timeBytes[3],
+                            periodBytes[0],
+
+                            0x0,
+                            module,
+                            modulePort,
+                            timeBytes[0]};
+
+            uint crc32b_val = crc32b(buffer_organized, 20);
 
             byte[] buffer_crc = {
                             H,
@@ -104,18 +139,17 @@ namespace USBScaleSoftware
                             timeBytes[0],
                             modulePort,
                             module,
-                            crc};
+                            (byte)crc32b_val};
 
             try { port.Open(); } catch { }
             try { port.Write(buffer_crc, 0, 20); } catch { MessageBox.Show("Connection Error"); return; }
 
             receive();
-
         }
 
         private void ZeroBTN_Click(object sender, EventArgs e)
         {
-            
+
             byte length = 0x06;
 
             byte destination = 0x01;
@@ -124,10 +158,40 @@ namespace USBScaleSoftware
             byte M_C = 0x07;    //code = 1910 to be represented in two bytes
             byte L_C = 0x76;
 
-            if (radioButton2.Checked)
-                channel = 0x02;
+            byte[] buffer = {
+                            H,
+                            Z,
+                            length,
+                            destination,
 
-            byte[] buffer_crc = {
+                            source,
+                            options,
+                            L_C,
+                            M_C,
+                           
+                            channel,
+                            };
+
+            byte[] buffer_organized = {
+                            destination,
+                            length,
+                            Z,
+                            H,
+                            
+                            M_C,
+                            L_C,
+                            options,
+                            source,
+
+                            0x0, //added for correction 
+                            0x0,
+                            0x0,
+                            channel,
+                            };
+
+            //byte[] buffer_2 = {0x48, 0x5A, 0x76, 0x22, 0x00, 0x00, 0x33, 0x07};
+            uint crc32b_val = crc32b(buffer_organized, 12);
+            byte[] buffer_with_crc = {
                             H,
                             Z,
                             length,
@@ -137,18 +201,16 @@ namespace USBScaleSoftware
                             L_C,
                             M_C,
                             channel,
-                            0xf4};
+                            (byte)crc32b_val};
+
 
             try { port.Open(); } catch { }
-
-            
-            try { port.Write(buffer_crc, 0, 10); } catch { MessageBox.Show("Connection Error"); return; }
-           
+            try { port.Write(buffer_with_crc, 0, 10); } catch { MessageBox.Show("Connection Error"); return; }
         }
 
         private void StopBTN_Click(object sender, EventArgs e)
         {
-            byte length = 0x06;
+            byte length = 0x05;
 
             byte destination = 0x01;
             byte source = 0x00;
@@ -156,10 +218,33 @@ namespace USBScaleSoftware
             byte M_C = 0x07;    //code = 1905 to be represented in two bytes
             byte L_C = 0x71;
 
-            if (radioButton2.Checked)
-                channel = 0x02;
+            byte[] buffer = {
+                            H,
+                            Z,
+                            length,
+                            destination,
 
-            byte[] buffer_crc = {
+                            source,
+                            options,
+                            L_C,
+                            M_C,
+                            };
+
+            byte[] buffer_organized = {
+                            destination,
+                            length,
+                            Z,
+                            H,
+
+                            M_C,
+                            L_C,
+                            options,
+                            source,
+                           };
+
+            uint crc32b_val = crc32b(buffer_organized, 8);
+
+            byte[] buffer_with_crc = {
                             H,
                             Z,
                             length,
@@ -168,20 +253,36 @@ namespace USBScaleSoftware
                             options,
                             L_C,
                             M_C,
-                            channel,
-                            0x61};
+                            (byte)crc32b_val};
 
             try { port.Open(); } catch { }
-
-
-            try { port.Write(buffer_crc, 0, 10); } catch { MessageBox.Show("Connection Error"); return; }
+            try { port.Write(buffer_with_crc, 0, 9); } catch { MessageBox.Show("Connection Error"); return; }
 
             try { port.Close(); } catch { };
             sevenSegmentArray1.Value = "STOPED";
             connectionLBL.Text = "Stopped";
             port.Dispose();
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+        }
 
+        private uint crc32b(byte[] message, byte l)
+        {
+            byte i, j;
+            uint crc, msb;
+
+            crc = 0xFFFFFFFF;
+            for (i = 0; i < l; i++)
+            {
+                // xor next byte to upper bits of crc
+                crc ^= (((uint)message[i]) << 24);
+                for (j = 0; j < 8; j++)
+                {    // Do eight times.
+                    msb = crc >> 31;
+                    crc <<= 1;
+                    crc ^= (0 - msb) & 0x04C11DB7;
+                }
+            }
+            return crc;
         }
 
         private void receive()
@@ -250,8 +351,25 @@ namespace USBScaleSoftware
             readBTN_Click(sender, e);
         }
 
+        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked)
+                channel = 0x02;
+            else
+                channel = 0x01;
+        }
+
+        private void RadioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked)
+                channel = 0x02;
+            else
+                channel = 0x01;
+        }
+
         private void IfnCB_CheckedChanged(object sender, EventArgs e)
         {
+            
             if (timeTB.Enabled)
                 timeTB.Enabled = false;
             else
