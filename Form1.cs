@@ -1,11 +1,13 @@
-﻿using System;
+﻿using MetroFramework;
+using MetroFramework.Forms;
+using System;
+using System.Globalization;
 using System.IO.Ports;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace USBScaleSoftware
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MetroForm
     {
         SerialPort port;
 
@@ -15,17 +17,12 @@ namespace USBScaleSoftware
         byte Z = 0x5A;
         byte channel = 0x01;
 
-        byte crc = 0xdc;
-
         public Form1()
         {
             InitializeComponent();
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
             unitCB.SelectedIndex = 0;
+
         }
 
         private void readBTN_Click(object sender, EventArgs e)
@@ -43,9 +40,9 @@ namespace USBScaleSoftware
             switch (unitCB.SelectedItem)
             {
                 case "Gram": L_C = 0x6D; break; //code = 1901 ; 076D
-                case "Kg": L_C = 0x6E; crc = 0x64; break; //code = 1902
-                case "Ounces": L_C = 0x6F; crc = 0x38; break; //code = 1903
-                case "Pounds": L_C = 0x70; crc = 0x63; break; //code = 1904
+                case "Kg": L_C = 0x6E; break; //code = 1902
+                case "Ounces": L_C = 0x6F; break; //code = 1903
+                case "Pounds": L_C = 0x70; break; //code = 1904
                 default: break;
             }
 
@@ -54,10 +51,10 @@ namespace USBScaleSoftware
             byte module = 0x01;
 
 
-            try { period = uint.Parse(periodTB.Text); } catch { MessageBox.Show("Check period input!"); return; }
+            try { period = uint.Parse(periodTB.Text); } catch { MetroMessageBox.Show(this, "Check period input!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
             if (timeTB.Enabled)
-                try { time = uint.Parse(timeTB.Text); } catch { MessageBox.Show("Check time input!"); return; }
+                try { time = uint.Parse(timeTB.Text); } catch { MetroMessageBox.Show(this, "Check time input!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             else
                 time = 0xFFFFFFFF;    // infinte time code
 
@@ -117,7 +114,7 @@ namespace USBScaleSoftware
                             modulePort,
                             timeBytes[0]};
 
-            uint crc32b_val = crc32b(buffer_organized, 20);
+            uint crc32b_val = crc32b(buffer_organized);
 
             byte[] buffer_crc = {
                             H,
@@ -142,7 +139,7 @@ namespace USBScaleSoftware
                             (byte)crc32b_val};
 
             try { port.Open(); } catch { }
-            try { port.Write(buffer_crc, 0, 20); } catch { MessageBox.Show("Connection Error"); return; }
+            try { port.Write(buffer_crc, 0, 20); } catch { MetroMessageBox.Show(this, "Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
             receive();
         }
@@ -168,7 +165,7 @@ namespace USBScaleSoftware
                             options,
                             L_C,
                             M_C,
-                           
+
                             channel,
                             };
 
@@ -177,7 +174,7 @@ namespace USBScaleSoftware
                             length,
                             Z,
                             H,
-                            
+
                             M_C,
                             L_C,
                             options,
@@ -190,7 +187,7 @@ namespace USBScaleSoftware
                             };
 
             //byte[] buffer_2 = {0x48, 0x5A, 0x76, 0x22, 0x00, 0x00, 0x33, 0x07};
-            uint crc32b_val = crc32b(buffer_organized, 12);
+            uint crc32b_val = crc32b(buffer_organized);
             byte[] buffer_with_crc = {
                             H,
                             Z,
@@ -205,7 +202,7 @@ namespace USBScaleSoftware
 
 
             try { port.Open(); } catch { }
-            try { port.Write(buffer_with_crc, 0, 10); } catch { MessageBox.Show("Connection Error"); return; }
+            try { port.Write(buffer_with_crc, 0, 10); } catch { MetroMessageBox.Show(this, "Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
         }
 
         private void StopBTN_Click(object sender, EventArgs e)
@@ -242,7 +239,7 @@ namespace USBScaleSoftware
                             source,
                            };
 
-            uint crc32b_val = crc32b(buffer_organized, 8);
+            uint crc32b_val = crc32b(buffer_organized);
 
             byte[] buffer_with_crc = {
                             H,
@@ -256,17 +253,18 @@ namespace USBScaleSoftware
                             (byte)crc32b_val};
 
             try { port.Open(); } catch { }
-            try { port.Write(buffer_with_crc, 0, 9); } catch { MessageBox.Show("Connection Error"); return; }
+            try { port.Write(buffer_with_crc, 0, 9); } catch { MetroMessageBox.Show(this,"Connection Error", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
             try { port.Close(); } catch { };
             sevenSegmentArray1.Value = "STOPED";
-            connectionLBL.Text = "Stopped";
+            connectionLBL.Text = "Stopped";       
             port.Dispose();
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
         }
 
-        private uint crc32b(byte[] message, byte l)
+        private uint crc32b(byte[] message)
         {
+            byte l = (byte)message.Length;
             byte i, j;
             uint crc, msb;
 
@@ -305,20 +303,16 @@ namespace USBScaleSoftware
                 string D3 = to_right_hex(buffer[0].ToString("X"));
                 string weight = D3 + D2 + D1 + D0;
 
+                int IntRep = int.Parse(weight, NumberStyles.AllowHexSpecifier);
+                float f = BitConverter.ToSingle(BitConverter.GetBytes(IntRep), 0);
+                float rounded = (float)(Math.Round(f, 2));
+                if (rounded < 0.1f)
+                    rounded = 0;
+
                 try
                 {
-                    uint weight_number = uint.Parse(weight, System.Globalization.NumberStyles.HexNumber) / 10;
-                    if (unitCB.SelectedItem.ToString() == "Kg")
-                    {
-                        float kg = weight_number / 1000f;
-                        sevenSegmentArray1.Value = kg + "";
-                        connectionLBL.Text = "Receiving...";
-                    }
-                    else
-                    {
-                        sevenSegmentArray1.Value = weight_number + "";
-                        connectionLBL.Text = "Receiving...";
-                    }
+                    sevenSegmentArray1.Value = rounded + "";
+                    connectionLBL.Text = "Receiving...";
                 }
                 catch
                 {
@@ -351,17 +345,17 @@ namespace USBScaleSoftware
             readBTN_Click(sender, e);
         }
 
-        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
+        private void MetroToggle1_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton2.Checked)
-                channel = 0x02;
+            if (timeTB.Enabled)
+                timeTB.Enabled = false;
             else
-                channel = 0x01;
+                timeTB.Enabled = true;
         }
 
-        private void RadioButton2_CheckedChanged(object sender, EventArgs e)
+        private void ChannelToggle_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton2.Checked)
+            if (channelToggle.Checked)
                 channel = 0x02;
             else
                 channel = 0x01;
@@ -369,11 +363,8 @@ namespace USBScaleSoftware
 
         private void IfnCB_CheckedChanged(object sender, EventArgs e)
         {
-            
-            if (timeTB.Enabled)
-                timeTB.Enabled = false;
-            else
-                timeTB.Enabled = true;
+
+           
         }
     }
 }

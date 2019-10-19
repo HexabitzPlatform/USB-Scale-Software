@@ -63,9 +63,9 @@ namespace USBScaleSoftware.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logo {
+        internal static System.Drawing.Bitmap colored_horizontal {
             get {
-                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                object obj = ResourceManager.GetObject("colored_horizontal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
