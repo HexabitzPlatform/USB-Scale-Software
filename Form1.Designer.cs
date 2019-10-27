@@ -55,7 +55,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::USBScaleSoftware.Properties.Resources.colored_horizontal;
-            this.pictureBox1.Location = new System.Drawing.Point(818, 588);
+            this.pictureBox1.Location = new System.Drawing.Point(818, 599);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 50);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -65,7 +65,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(734, 604);
+            this.label5.Location = new System.Drawing.Point(734, 616);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(78, 17);
             this.label5.TabIndex = 48;
@@ -75,7 +75,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(347, 609);
+            this.label4.Location = new System.Drawing.Point(347, 610);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 29);
             this.label4.TabIndex = 47;
@@ -99,7 +99,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label3.Location = new System.Drawing.Point(117, 348);
+            this.label3.Location = new System.Drawing.Point(117, 338);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(142, 29);
             this.label3.TabIndex = 45;
@@ -130,11 +130,11 @@
             // 
             this.connectionLBL.AutoSize = true;
             this.connectionLBL.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.connectionLBL.Location = new System.Drawing.Point(87, 609);
+            this.connectionLBL.Location = new System.Drawing.Point(87, 610);
             this.connectionLBL.Name = "connectionLBL";
-            this.connectionLBL.Size = new System.Drawing.Size(207, 29);
+            this.connectionLBL.Size = new System.Drawing.Size(174, 29);
             this.connectionLBL.TabIndex = 39;
-            this.connectionLBL.Text = "Connection Status";
+            this.connectionLBL.Text = "Not Connected";
             // 
             // label2
             // 
@@ -193,6 +193,7 @@
             this.zeroBTN.Text = "Zero";
             this.zeroBTN.UseSelectable = true;
             this.zeroBTN.UseStyleColors = true;
+            this.zeroBTN.Click += new System.EventHandler(this.ZeroBTN_Click);
             // 
             // stopBTN
             // 
@@ -205,6 +206,7 @@
             this.stopBTN.Text = "Stop";
             this.stopBTN.UseSelectable = true;
             this.stopBTN.UseStyleColors = true;
+            this.stopBTN.Click += new System.EventHandler(this.StopBTN_Click);
             // 
             // unitCB
             // 
@@ -215,7 +217,7 @@
             "KG",
             "Ounces",
             "Pounds"});
-            this.unitCB.Location = new System.Drawing.Point(117, 380);
+            this.unitCB.Location = new System.Drawing.Point(117, 370);
             this.unitCB.Name = "unitCB";
             this.unitCB.Size = new System.Drawing.Size(207, 30);
             this.unitCB.TabIndex = 55;
@@ -295,18 +297,18 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label6.Location = new System.Drawing.Point(510, 251);
+            this.label6.Location = new System.Drawing.Point(496, 251);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(121, 29);
+            this.label6.Size = new System.Drawing.Size(135, 29);
             this.label6.TabIndex = 58;
-            this.label6.Text = "Infint time:";
+            this.label6.Text = "Infinte time:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label7.Location = new System.Drawing.Point(439, 373);
+            this.label7.Location = new System.Drawing.Point(496, 375);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(133, 29);
             this.label7.TabIndex = 59;
@@ -315,7 +317,7 @@
             // channelToggle
             // 
             this.channelToggle.FontSize = MetroFramework.MetroLinkSize.Medium;
-            this.channelToggle.Location = new System.Drawing.Point(578, 368);
+            this.channelToggle.Location = new System.Drawing.Point(637, 370);
             this.channelToggle.Name = "channelToggle";
             this.channelToggle.Size = new System.Drawing.Size(92, 34);
             this.channelToggle.TabIndex = 60;

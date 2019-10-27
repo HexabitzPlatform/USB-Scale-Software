@@ -22,7 +22,6 @@ namespace USBScaleSoftware
             InitializeComponent();
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
             unitCB.SelectedIndex = 0;
-
         }
 
         private void readBTN_Click(object sender, EventArgs e)
@@ -342,7 +341,7 @@ namespace USBScaleSoftware
             StopBTN_Click(sender, e);
             weight = unitCB.SelectedItem.ToString();
             weightLBL.Text = weight;
-            readBTN_Click(sender, e);
+            //readBTN_Click(sender, e);
         }
 
         private void MetroToggle1_CheckedChanged(object sender, EventArgs e)
