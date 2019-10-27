@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.28705.295
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBScaleSoftware", "USBScaleSoftware.csproj", "{1A5D32B5-0B23-450F-8342-94ED40749D66}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7B771360-B9CA-4767-9F2E-882BEA7E91AA}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\hanim\Pictures\Screenshots\Screenshot.png = C:\Users\hanim\Pictures\Screenshots\Screenshot.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
