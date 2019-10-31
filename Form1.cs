@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Windows.Forms;
 
+
 namespace USBScaleSoftware
 {
     public partial class Form1 : MetroForm
@@ -15,6 +16,8 @@ namespace USBScaleSoftware
 
         byte H = 0x48;
         byte Z = 0x5A;
+        byte destination = 0x01;
+        byte source = 0x00;
         byte channel = 0x01;
 
         public Form1()
@@ -31,17 +34,16 @@ namespace USBScaleSoftware
 
             byte length = 0x10;
 
-            byte destination = 0x01;
-            byte source = 0x00;
+            
             byte options = 0x22;
             byte M_C = 0x07;    //code = 1901 to be represented in two bytes
             byte L_C = 0x6D;     // default is gram reading
             switch (unitCB.SelectedItem)
             {
-                case "Gram": L_C = 0x6D; break; //code = 1901 ; 076D
-                case "Kg": L_C = 0x6E; break; //code = 1902
-                case "Ounces": L_C = 0x6F; break; //code = 1903
-                case "Pounds": L_C = 0x70; break; //code = 1904
+                case "Gram":   L_C = 0x6D; break; // code = 1901 : 076D
+                case "Kg":     L_C = 0x6E; break; // code = 1902 : 076E
+                case "Ounces": L_C = 0x6F; break; // code = 1903 : 076F
+                case "Pounds": L_C = 0x70; break; // code = 1904 : 0770
                 default: break;
             }
 
@@ -60,6 +62,7 @@ namespace USBScaleSoftware
 
             byte[] periodBytes = BitConverter.GetBytes(period);
             byte[] timeBytes = BitConverter.GetBytes(time);
+
 
 
             byte[] buffer = {
@@ -108,12 +111,12 @@ namespace USBScaleSoftware
                             timeBytes[3],
                             periodBytes[0],
 
-                            0x0,
+                            0x0, // added for correction: the buffer length must be multiples of 4 so here its 20 byte
                             module,
                             modulePort,
                             timeBytes[0]};
 
-            uint crc32b_val = crc32b(buffer_organized);
+            uint crc32b_val = CRC32B(buffer_organized);
 
             byte[] buffer_crc = {
                             H,
@@ -148,8 +151,6 @@ namespace USBScaleSoftware
 
             byte length = 0x06;
 
-            byte destination = 0x01;
-            byte source = 0x00;
             byte options = 0x22;
             byte M_C = 0x07;    //code = 1910 to be represented in two bytes
             byte L_C = 0x76;
@@ -168,6 +169,9 @@ namespace USBScaleSoftware
                             channel,
                             };
 
+            HexabitzModulesConnector connector = new HexabitzModulesConnector();
+            connector.SendMessage(COM.Value + "", M_C, L_C, channel, new byte[0]);
+
             byte[] buffer_organized = {
                             destination,
                             length,
@@ -179,14 +183,13 @@ namespace USBScaleSoftware
                             options,
                             source,
 
-                            0x0, //added for correction 
-                            0x0,
-                            0x0,
+                            0x0, //added for correction: the buffer length must be multiples of 4 so here its 12 byte
+                            0x0, //added for correction: the buffer length must be multiples of 4 so here its 12 byte
+                            0x0, //added for correction: the buffer length must be multiples of 4 so here its 12 byte
                             channel,
                             };
 
-            //byte[] buffer_2 = {0x48, 0x5A, 0x76, 0x22, 0x00, 0x00, 0x33, 0x07};
-            uint crc32b_val = crc32b(buffer_organized);
+            uint crc32b_val = CRC32B(buffer_organized);
             byte[] buffer_with_crc = {
                             H,
                             Z,
@@ -208,7 +211,6 @@ namespace USBScaleSoftware
         {
             byte length = 0x05;
 
-            byte destination = 0x01;
             byte source = 0x00;
             byte options = 0x22;
             byte M_C = 0x07;    //code = 1905 to be represented in two bytes
@@ -238,7 +240,7 @@ namespace USBScaleSoftware
                             source,
                            };
 
-            uint crc32b_val = crc32b(buffer_organized);
+            uint crc32b_val = CRC32B(buffer_organized);
 
             byte[] buffer_with_crc = {
                             H,
@@ -261,7 +263,7 @@ namespace USBScaleSoftware
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
         }
 
-        private uint crc32b(byte[] message)
+        private uint CRC32B(byte[] message)
         {
             byte l = (byte)message.Length;
             byte i, j;
@@ -358,12 +360,6 @@ namespace USBScaleSoftware
                 channel = 0x02;
             else
                 channel = 0x01;
-        }
-
-        private void IfnCB_CheckedChanged(object sender, EventArgs e)
-        {
-
-           
         }
     }
 }
