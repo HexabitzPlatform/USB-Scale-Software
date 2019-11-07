@@ -124,6 +124,7 @@
   <ItemGroup>
     <Content Include="logo.ico" />
     <None Include="Resources\colored horizontal.png" />
+    <Content Include="OldForm1.txt" />
     <Content Include="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>

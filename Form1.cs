@@ -14,44 +14,37 @@ namespace USBScaleSoftware
 
         uint period, time;
 
-        byte H = 0x48;
-        byte Z = 0x5A;
         byte destination = 0x01;
         byte source = 0x00;
         byte options = 0x22;
         byte channel = 0x01;
+        int code;
 
         public Form1()
         {
             InitializeComponent();
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
-            unitCB.SelectedIndex = 0;
         }
 
         private void readBTN_Click(object sender, EventArgs e)
         {
             port.Dispose();
             port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
-
-            byte length = 0x10;
-            byte MC = 0x07;    //code = 1901 to be represented in two bytes
-            byte LC = 0x6D;     // default is gram reading
+            code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_GRAM; // default is gram reading
             switch (unitCB.SelectedItem)
             {
-                case "Gram":   LC = 0x6D; break; // code = 1901 : 076D
-                case "Kg":     LC = 0x6E; break; // code = 1902 : 076E
-                case "Ounces": LC = 0x6F; break; // code = 1903 : 076F
-                case "Pounds": LC = 0x70; break; // code = 1904 : 0770
+                case "Gram":   code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_GRAM; break; 
+                case "Kg":     code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_KGRAM; break;
+                case "Ounces": code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_OUNCE; break;
+                case "Pounds": code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_POUND; break;
                 default: break;
             }
-
 
             byte modulePort = 0x03;
             byte module = 0x01;
 
 
             try { period = uint.Parse(periodTB.Text); } catch { MetroMessageBox.Show(this, "Check period input!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
-
             if (timeTB.Enabled)
                 try { time = uint.Parse(timeTB.Text); } catch { MetroMessageBox.Show(this, "Check time input!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             else
@@ -61,232 +54,48 @@ namespace USBScaleSoftware
             byte[] periodBytes = BitConverter.GetBytes(period);
             byte[] timeBytes = BitConverter.GetBytes(time);
 
-
-            byte[] Message = new byte[periodBytes.Length + timeBytes.Length];
-            periodBytes.CopyTo(Message, 0);
-            timeBytes.CopyTo(Message, periodBytes.Length);
-
-            byte[] buffer = {
-                            H,
-                            Z,
-                            length,
-                            destination,
-
-                            source,
-                            options,
-                            LC,
-                            MC,
-
+            byte[] Message = {
                             channel,
                             periodBytes[3],
                             periodBytes[2],
                             periodBytes[1],
-
                             periodBytes[0],
+
                             timeBytes[3],
                             timeBytes[2],
                             timeBytes[1],
-
                             timeBytes[0],
+
                             modulePort,
                             module};
 
-            byte[] buffer_organized = {
-                            destination,
-                            length,
-                            Z,
-                            H,
 
-                            MC,
-                            LC,
-                            options,
-                            source,
-
-                            periodBytes[1],
-                            periodBytes[2],
-                            periodBytes[3],
-                            channel,
-
-                            timeBytes[1],
-                            timeBytes[2],
-                            timeBytes[3],
-                            periodBytes[0],
-
-                            0x0, // Added for correction: the buffer length must be multiples of 4 so here its 20 byte
-                            module,
-                            modulePort,
-                            timeBytes[0]};
-
-            //Buffer b = new Buffer(destination, source, options, (int)Buffer.MSG_Codes.CODE_H26R0_STREAM_PORT_GRAM, channel, Message, modulePort, module);
-            //byte CRC = b.GetBufferCRC();
-            //byte[] OrganizedBuffer = b.OrganizedBuffer;
-            //byte[] fullBuffer = b.AllBuffer;
+            HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
+            HexInter.SendMessage(destination, source, options, code, Message);
             
-
-            uint crc32b_val = CRC32B(buffer_organized);
-            byte[] buffer_crc = {
-                            H,
-                            Z,
-                            length,
-                            destination,
-                            source,
-                            options,
-                            LC,
-                            MC,
-                            channel,
-                            periodBytes[3],
-                            periodBytes[2],
-                            periodBytes[1],
-                            periodBytes[0],
-                            timeBytes[3],
-                            timeBytes[2],
-                            timeBytes[1],
-                            timeBytes[0],
-                            modulePort,
-                            module,
-                            (byte)crc32b_val};
-
-            try { port.Open(); } catch { }
-            try { port.Write(buffer_crc, 0, 20); } catch { MetroMessageBox.Show(this, "Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
-
             receive();
         }
 
         private void ZeroBTN_Click(object sender, EventArgs e)
         {
-            byte length = 0x06;
-            byte MC = 0x07;    //code = 1910 to be represented in two bytes
-            byte LC = 0x76;
+            code = (int)HexaInterface.MSG_Codes.CODE_H26R0_ZEROCAL;
 
-            byte[] buffer = {
-                            H,
-                            Z,
-                            length,
-                            destination,
-
-                            source,
-                            options,
-                            LC,
-                            MC,
-
-                            channel,
-                            };
-
-            byte[] buffer_organized = {
-                            destination,
-                            length,
-                            Z,
-                            H,
-
-                            MC,
-                            LC,
-                            options,
-                            source,
-
-                            0x0, //added for correction: the buffer length must be multiples of 4 so here its 12 byte
-                            0x0, //added for correction: the buffer length must be multiples of 4 so here its 12 byte
-                            0x0, //added for correction: the buffer length must be multiples of 4 so here its 12 byte
-                            channel,
-                            };
-
-
-            Buffer zeroBuffer = new Buffer(destination, source, options, (int)Buffer.MSG_Codes.CODE_H26R0_ZEROCAL, channel, new byte[0], 0, 0);
-            zeroBuffer.GetAll();
-            zeroBuffer.GetCRC();
-
-            uint crc32b_val = CRC32B(buffer_organized);
-            byte[] buffer_with_crc = {
-                            H,
-                            Z,
-                            length,
-                            destination,
-                            source,
-                            options,
-                            LC,
-                            MC,
-                            channel,
-                            (byte)crc32b_val};
-
-
-            try { port.Open(); } catch { }
-            try { port.Write(buffer_with_crc, 0, 10); } catch { MetroMessageBox.Show(this, "Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+            HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
+            byte[] Message = { channel };
+            HexInter.SendMessage(destination, source,  options, code, Message);
+            connectionLBL.Text = "Zero Calbirated";
         }
 
         private void StopBTN_Click(object sender, EventArgs e)
         {
+            code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STOP;
 
-            Buffer stopBuffer = new Buffer(destination, source, options, (int)Buffer.MSG_Codes.CODE_H26R0_STOP, 123, new byte[0], 0, 0);
-
-            byte length = 0x05;
-            byte MC = 0x07;    //code = 1905 to be represented in two bytes
-            byte LC = 0x71;
-
-            byte[] buffer = {
-                            H,
-                            Z,
-                            length,
-                            destination,
-
-                            source,
-                            options,
-                            LC,
-                            MC,
-                            };
-
-            byte[] buffer_organized = {
-                            destination,
-                            length,
-                            Z,
-                            H,
-
-                            MC,
-                            LC,
-                            options,
-                            source,
-                           };
-
-            uint crc32b_val = CRC32B(buffer_organized);
-
-            byte[] buffer_with_crc = {
-                            H,
-                            Z,
-                            length,
-                            destination,
-                            source,
-                            options,
-                            LC,
-                            MC,
-                            (byte)crc32b_val};
-
-            try { port.Open(); } catch { }
-            try { port.Write(buffer_with_crc, 0, 9); } catch { MetroMessageBox.Show(this, "Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
-
-            try { port.Close(); } catch { };
-            sevenSegmentArray1.Value = "STOPED";
+            HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
+            byte[] Message = new byte[0];
+            HexInter.SendMessage(destination, source, options, code, Message);
+            
+            sevenSegmentArray1.Value = "STOP";
             connectionLBL.Text = "Stopped";
-            port.Dispose();
-            port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
-        }
-
-        private uint CRC32B(byte[] message)
-        {
-            byte l = (byte)message.Length;
-            byte i, j;
-            uint crc, msb;
-
-            crc = 0xFFFFFFFF;
-            for (i = 0; i < l; i++)
-            {
-                // xor next byte to upper bits of crc
-                crc ^= (((uint)message[i]) << 24);
-                for (j = 0; j < 8; j++)
-                {    // Do eight times.
-                    msb = crc >> 31;
-                    crc <<= 1;
-                    crc ^= (0 - msb) & 0x04C11DB7;
-                }
-            }
-            return crc;
         }
 
         private void receive()
@@ -362,9 +171,9 @@ namespace USBScaleSoftware
         private void ChannelToggle_CheckedChanged(object sender, EventArgs e)
         {
             if (channelToggle.Checked)
-                channel = 0x02;
-            else
                 channel = 0x01;
+            else
+                channel = 0x02;
         }
     }
 }

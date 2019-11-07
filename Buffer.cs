@@ -4,130 +4,83 @@ namespace USBScaleSoftware
 {
     class Buffer
     {
-        #region Buffer Variables
+        #region Variables
         public byte H = 0x48,
              Z = 0x5A,
-             Length,
+             Length = 0,
              Destination,
              Source,
              Options,
-             LC,     // Least significate code byte.
-             MC,     // Most significate code byte.
-             Channel,
+             LSC,     // Least significance code byte.
+             MSC,     // Most significance code byte.
              // Message byte array 
              // ...
-             ModulePort,
-             Module,
              CRC;
-        public byte[] Message, AllBuffer, OrganizedBuffer;
+        List<byte> AllBufferList;
+        byte[] Message, AllBuffer, OrganizedBuffer;
         #endregion
 
-        // Main Constructor
-        // If there is no Message or ModulePort initialize the message with new byte[0] & ModulePort = 0 & Module = 0. 
-        public Buffer (byte Destination, byte Source, byte Options, int Code, byte Channel, byte[] Message, byte ModulePort, byte Module)
-        {
-            if (ModulePort != 0)
-                Length = (byte)(12 + Message.Length - 4);
-            else
-                if (Channel != 3)
-                Length = (byte)(10 + Message.Length - 4); // Without ModulePort & Module.
-            else
-                Length = (byte)(9 + Message.Length - 4);
-
-            this.Destination = Destination;
-            this.Source = Source;
-            this.Options = Options;
-            LC = (byte)(Code & 0xFF); // Get the MC & LC automaticly from the code.
-            MC = (byte)(Code >> 8);
-            this.Channel = Channel;
-            this.Message = Message;
-
-            this.ModulePort = ModulePort;
-            this.Module = Module;
-            CRC = GetCRC();
-            AllBuffer = GetAll();
-        }
-        public Buffer(byte Source, byte Destination, byte Options, int Code, byte[] Message)
+        /// <summary>
+        /// The Hexabitz Buffer class wiki: https://hexabitz.com/docs/code-overview/array-messaging/
+        /// The general constructor, all the payload parameters [Par1, Par2,...] must be included in the correct order within the Message array.
+        /// </summary>
+        public Buffer(byte Destination, byte Source,  byte Options, int Code, byte[] Message)
         {
             this.Destination = Destination;
             this.Source = Source;
             this.Options = Options;
-            LC = (byte)(Code & 0xFF); // Get the MC & LC automaticly from the code.
-            MC = (byte)(Code >> 8);
+            LSC = (byte)(Code & 0xFF); // Get the MSC & LSC automaticly from the code.
+            MSC = (byte)(Code >> 8);
             this.Message = Message;
-        }
 
-
-        // Return the Cyclic Redundancy Check for the buffer
-        public byte GetCRC()
-        {
-            List<byte> BufferList = new List<byte>();
-            BufferList.Add(H);
-            BufferList.Add(Z);
-            BufferList.Add(Length);
-            BufferList.Add(Destination);
-            BufferList.Add(Source);
-            BufferList.Add(Options);
-            BufferList.Add(LC);
-            BufferList.Add(MC);
-            BufferList.Add(Channel);
+            AllBufferList = new List<byte>();
+            AllBufferList.Add(H);
+            AllBufferList.Add(Z);
+            AllBufferList.Add(Length);
+            AllBufferList.Add(Destination);
+            AllBufferList.Add(Source);
+            AllBufferList.Add(Options);
+            AllBufferList.Add(LSC);
+            if(MSC != 0) // If the code is only one byte so the MSC
+                AllBufferList.Add(MSC);
 
             foreach (byte item in Message)
             {
-                BufferList.Add(item);
-            }
-            if (ModulePort != 0)
-            {
-                BufferList.Add(ModulePort);
-                BufferList.Add(Module);
+                AllBufferList.Add(item);
             }
 
-            List<byte> organizedBufferList = Organize(BufferList); // Here we are organizing the buffer to calculate the CRC for it.
+            Length = (byte)(AllBufferList.Count - 3); // Not including H & Z delimiters, the length byte itself and the CRC byte
+                                                      // so its 4 but we didn't add the CRC yet so its 3.
+            AllBufferList[2] = Length; // Replace it with the correct length value.
+            CRC = GetCRC();
+            AllBufferList.Add(CRC);
+            AllBuffer = AllBufferList.ToArray();
+        }
+
+        // Return the Cyclic Redundancy Check for the buffer.
+        public byte GetCRC()
+        {
+            List<byte> organizedBufferList = Organize(AllBufferList); // Here we are organizing the buffer to calculate the CRC for it.
             OrganizedBuffer = organizedBufferList.ToArray();
             CRC = CRC32B(OrganizedBuffer);
-
             return CRC;
         }
 
-        // Get the whole buffer 
+        // Get the whole buffer.
         public byte[] GetAll()
         {
-            List<byte> BufferList = new List<byte>();
-            BufferList.Add(H);
-            BufferList.Add(Z);
-            BufferList.Add(Length);
-            BufferList.Add(Destination);
-            BufferList.Add(Source);
-            BufferList.Add(Options);
-            BufferList.Add(LC);
-            BufferList.Add(MC);
-            BufferList.Add(Channel);
-
-            foreach (byte item in Message)
-            {
-                BufferList.Add(item);
-            }
-            if (ModulePort != 0)
-            {
-                BufferList.Add(ModulePort);
-                BufferList.Add(Module);
-            }
-            BufferList.Add(CRC);
-
-            AllBuffer = BufferList.ToArray();
-
             return AllBuffer;
         }
 
         // Routin for ordering the buffer to calculate the CRC for it.
-        private List<byte> Organize(List<byte> list) 
+        private List<byte> Organize(List<byte> BufferList) 
         {
-            List<byte> OrganizedList = new List<byte>();
+            List<byte> OrganizedBuffer = new List<byte>();
 
             int MultiplesOf4 = 0;
 
             List<byte> temp = new List<byte>();
-            foreach (byte item in list)
+            foreach (byte item in BufferList)
             {
                 temp.Add(item);
                 if (temp.Count == 4)
@@ -136,18 +89,18 @@ namespace USBScaleSoftware
                     temp.Reverse();
                     foreach (byte itemReversed in temp)
                     {
-                        OrganizedList.Add(itemReversed);
+                        OrganizedBuffer.Add(itemReversed);
                     }
                     temp.Clear();
                 }
             }
             temp.Clear();
-            if ((list.Count - OrganizedList.Count) != 0)
+            if ((BufferList.Count - OrganizedBuffer.Count) != 0)
             {
                 int startingItem = MultiplesOf4 * 4;
-                for (int i = startingItem; i < list.Count; i++)
+                for (int i = startingItem; i < BufferList.Count; i++)
                 {
-                    temp.Add(list[i]);
+                    temp.Add(BufferList[i]);
                 }
 
                 while (temp.Count < 4)
@@ -156,10 +109,10 @@ namespace USBScaleSoftware
 
                 foreach (byte value in temp)
                 {
-                    OrganizedList.Add(value);
+                    OrganizedBuffer.Add(value);
                 }
             }
-            return OrganizedList;
+            return OrganizedBuffer;
         }
 
         // Algorithm used in the Hexabitz modules hardware to calculate the correct CRC32 but we are only using the first byte in our modules. 
@@ -180,25 +133,6 @@ namespace USBScaleSoftware
                 }
             }
             return (byte)CRC; // Remove (byte) to get get the full int.
-        }
-
-        
-
-        // Enum for the codes to be sent to the modules
-        public enum MSG_Codes
-        {
-            // H26R0x
-            CODE_H26R0_SET_RATE = 1900,
-            CODE_H26R0_STREAM_PORT_GRAM = 1901,
-            CODE_H26R0_STREAM_PORT_KGRAM = 1902,
-            CODE_H26R0_STREAM_PORT_OUNCE = 1903,
-            CODE_H26R0_STREAM_PORT_POUND = 1904,
-            CODE_H26R0_STOP = 1905,
-            CODE_H26R0_SAMPLE_GRAM = 1906,
-            CODE_H26R0_SAMPLE_KGRAM = 1907,
-            CODE_H26R0_SAMPLE_OUNCE = 1908,
-            CODE_H26R0_SAMPLE_POUND = 1909,
-            CODE_H26R0_ZEROCAL = 1910,
         }
     }
 }
