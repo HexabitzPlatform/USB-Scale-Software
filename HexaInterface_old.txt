@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace USBScaleSoftware
 {
-    class HexaInterface
+    public class HexaInterface
     {
         SerialPort Port;
         string COM;
-        public byte[] AllBuffer;
+        public byte[] AllMessage;
         public HexaInterface(string COM)
         {
             this.COM = COM;
@@ -31,25 +31,23 @@ namespace USBScaleSoftware
         public void SendMessage(byte Destination, byte Source, byte Options, int Code, byte[] Message)
         {
             Start();
-            Buffer Buff = new Buffer(Destination, Source, Options, Code, Message);
-            AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
-            
-            // Here we call the platform sending protocol.
-            // C# Example:
+            Message _Message = new Message(Destination, Source, Options, Code, Message);
+            AllMessage = _Message.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
+
             try { Port.Open(); } catch { }
-            try { Port.Write(AllBuffer, 0, AllBuffer.Length); } catch { MessageBox.Show("Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try { Port.Write(AllMessage, 0, AllMessage.Length); } catch { Console.WriteLine("Connection Error"); }
             try { Port.Close(); } catch { }
             End();
         }
 
-        // The reviceing method to listen to the port if we got any respond from it.
-        private void receive()
+        // The reviceing method to listen to the port if we got any response from it.
+        private void Receive()
         {
             Port.DataReceived += new SerialDataReceivedEventHandler(Port_DataReceived);
             try { Port.Open(); } catch { }
         }
 
-        // Method the .Net platform provide to responed to recieved data from SerialPort.
+        // Method the .Net platform provids to responed to recieved data from SerialPort.
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             int bytes_count = 0;
@@ -85,20 +83,44 @@ namespace USBScaleSoftware
         }
 
         // Enum for the codes to be sent to the modules
-        public enum MSG_Codes
+        public enum Message_Codes
         {
             // H26R0x
-            CODE_H26R0_SET_RATE = 1900,
             CODE_H26R0_STREAM_PORT_GRAM = 1901,
             CODE_H26R0_STREAM_PORT_KGRAM = 1902,
             CODE_H26R0_STREAM_PORT_OUNCE = 1903,
             CODE_H26R0_STREAM_PORT_POUND = 1904,
             CODE_H26R0_STOP = 1905,
-            CODE_H26R0_SAMPLE_GRAM = 1906,
-            CODE_H26R0_SAMPLE_KGRAM = 1907,
-            CODE_H26R0_SAMPLE_OUNCE = 1908,
-            CODE_H26R0_SAMPLE_POUND = 1909,
             CODE_H26R0_ZEROCAL = 1910,
         }
+
+
+        #region Options
+
+        // 8th bit (MSB): Long messages flag. If set, then message parameters continue in the next message.
+
+        // 6-7th bits:
+        public enum Message_Response_Options
+        {
+            SEND_BACK_NO_RESPONSE = 00,
+            SEND_RESPONSES_ONLY_MESSAGES = 01,
+            SEND_RESPONSES_ONLY_TO_CLI_COMMANDS = 10,
+            SEND_RESPONSES_TO_EVERYTHING = 11,
+        }
+        // 5th bit: reserved.
+
+        // 3rd-4th bits:
+        public enum Message_Trace_Options
+        {
+            SHOW_NO_TRACE = 00,
+            SHOW_MESSAGE_TRACE = 01,
+            SHOW_MESSAGE_RESPONSE_TRACE = 10,
+            SHOW_TRACE_FOR_BOTH_MESSAGES_AND_THEIR_RESPONSES = 11,
+        }
+
+        // 2nd bit: Extended Message Code flag. If set, then message codes are 16 bits.
+        // 1st bit (LSB): Extended Options flag. If set, then the next byte is an Options byte as well.
+
+        #endregion
     }
 }

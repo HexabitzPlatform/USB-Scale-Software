@@ -240,7 +240,7 @@
             this.periodTB.CustomButton.Visible = false;
             this.periodTB.FontSize = MetroFramework.MetroTextBoxSize.Tall;
             this.periodTB.Lines = new string[] {
-        "500"};
+        "800"};
             this.periodTB.Location = new System.Drawing.Point(117, 251);
             this.periodTB.MaxLength = 32767;
             this.periodTB.Multiline = true;
@@ -253,7 +253,7 @@
             this.periodTB.ShortcutsEnabled = true;
             this.periodTB.Size = new System.Drawing.Size(161, 33);
             this.periodTB.TabIndex = 56;
-            this.periodTB.Text = "500";
+            this.periodTB.Text = "800";
             this.periodTB.UseSelectable = true;
             this.periodTB.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
             this.periodTB.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);

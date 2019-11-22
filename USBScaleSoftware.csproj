@@ -56,6 +56,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DOT-NET-COMS-LIB">
+      <HintPath>..\DOT-NET-COMS-LIB\DOT-NET-COMS-LIB\bin\Debug\DOT-NET-COMS-LIB.dll</HintPath>
+    </Reference>
     <Reference Include="HexabitzConnectionLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\HexabitzConnectionLib\bin\Debug\netstandard2.0\HexabitzConnectionLib.dll</HintPath>
@@ -85,14 +88,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buffer.cs" />
+    <Content Include="Message_old.txt" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="HexaInterface.cs" />
+    <Content Include="HexaInterface_old.txt" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

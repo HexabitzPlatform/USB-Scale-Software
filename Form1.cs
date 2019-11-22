@@ -4,45 +4,41 @@ using System;
 using System.Globalization;
 using System.IO.Ports;
 using System.Windows.Forms;
-
+using DOT_NET_COMS_LIB;
 
 namespace USBScaleSoftware
 {
     public partial class Form1 : MetroForm
     {
-        SerialPort port;
 
+        SerialPort Port;
         uint period, time;
-
-        byte destination = 0x01;
-        byte source = 0x00;
-        byte options = 0x22;
+        byte Destination = 0x01;
+        byte Source = 0x00;
+        byte Options = 0x22;
         byte channel = 0x01;
-        int code;
+        int Code;
+        public byte[] AllBuffer;
 
         public Form1()
         {
             InitializeComponent();
-            port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
         }
 
         private void readBTN_Click(object sender, EventArgs e)
         {
-            port.Dispose();
-            port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
-            code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_GRAM; // default is gram reading
+            Port.Dispose();
+            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STREAM_PORT_GRAM; // default is gram reading
             switch (unitCB.SelectedItem)
             {
-                case "Gram":   code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_GRAM; break; 
-                case "Kg":     code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_KGRAM; break;
-                case "Ounces": code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_OUNCE; break;
-                case "Pounds": code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STREAM_PORT_POUND; break;
+                case "Gram":   Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STREAM_PORT_GRAM; break; 
+                case "KG":     Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STREAM_PORT_KGRAM; break;
+                case "Ounces": Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STREAM_PORT_OUNCE; break;
+                case "Pounds": Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STREAM_PORT_POUND; break;
                 default: break;
             }
-
-            byte modulePort = 0x03;
-            byte module = 0x01;
-
 
             try { period = uint.Parse(periodTB.Text); } catch { MetroMessageBox.Show(this, "Check period input!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             if (timeTB.Enabled)
@@ -54,7 +50,10 @@ namespace USBScaleSoftware
             byte[] periodBytes = BitConverter.GetBytes(period);
             byte[] timeBytes = BitConverter.GetBytes(time);
 
-            byte[] Message = {
+            byte modulePort = 0x03;
+            byte module = 0x01;
+
+            byte[] Payload = {
                             channel,
                             periodBytes[3],
                             periodBytes[2],
@@ -71,46 +70,77 @@ namespace USBScaleSoftware
 
 
             HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
-            HexInter.SendMessage(destination, source, options, code, Message);
-            
-            receive();
+
+            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
+            AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
+
+            try { Port.Open(); } catch { }
+            try { Port.Write(AllBuffer, 0, AllBuffer.Length); } catch { MessageBox.Show("Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try { Port.Close(); } catch { }
+
+            HexInter.SendMessage(Destination, Source, Options, Code, Payload);
+
+            Receive();
         }
 
         private void ZeroBTN_Click(object sender, EventArgs e)
         {
-            code = (int)HexaInterface.MSG_Codes.CODE_H26R0_ZEROCAL;
+            Port.Dispose();
+            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Code = (int)HexaInterface.Message_Codes.CODE_H26R0_ZEROCAL;
 
-            HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
-            byte[] Message = { channel };
-            HexInter.SendMessage(destination, source,  options, code, Message);
-            connectionLBL.Text = "Zero Calbirated";
+            //HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
+            byte[] Payload = { channel };
+
+            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
+            AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
+
+            try { Port.Open(); } catch { }
+            try { Port.Write(AllBuffer, 0, AllBuffer.Length); } catch { MessageBox.Show("Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try { Port.Close(); } catch { }
+
+            //HexInter.SendMessage(Destination, Source,  Options, Code, Message);
+            connectionLBL.Text = "Zero Calibrated";
         }
 
         private void StopBTN_Click(object sender, EventArgs e)
         {
-            code = (int)HexaInterface.MSG_Codes.CODE_H26R0_STOP;
+            Port.Dispose();
+            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STOP;
 
             HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
-            byte[] Message = new byte[0];
-            HexInter.SendMessage(destination, source, options, code, Message);
-            
+            byte[] Payload = new byte[0];
+            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
+            AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
+
+            // Here we call the platform sending protocol.
+            // C# Example:
+            try { Port.Open(); } catch { }
+            try { Port.Write(AllBuffer, 0, AllBuffer.Length); } catch { MessageBox.Show("Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try { Port.Close(); } catch { }
+
+            //HexInter.SendMessage(Destination, Source, Options, Code, Message);
+
             sevenSegmentArray1.Value = "STOP";
             connectionLBL.Text = "Stopped";
         }
 
-        private void receive()
+        // The receiving method to listen to the port if we got any respond from it.
+        private void Receive()
         {
-            port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
-            try { port.Open(); } catch { }
+            Port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
+            try { Port.Open(); } catch { }
         }
 
+        // Method the .Net platform provide to responed to recieved data from SerialPort.
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             Invoke((MethodInvoker)delegate
             {
                 int bytes_count = 0;
                 byte[] buffer = new byte[4];
-                bytes_count = port.Read(buffer, 0, 4);
+                bytes_count = Port.Read(buffer, 0, 4);
 
                 string D0 = to_right_hex(buffer[3].ToString("X"));
                 string D1 = to_right_hex(buffer[2].ToString("X"));
@@ -120,13 +150,12 @@ namespace USBScaleSoftware
 
                 int IntRep = int.Parse(weight, NumberStyles.AllowHexSpecifier);
                 float f = BitConverter.ToSingle(BitConverter.GetBytes(IntRep), 0);
-                float rounded = (float)(Math.Round(f, 2));
-                if (rounded < 0.1f)
-                    rounded = 0;
+                //float rounded = (float)(Math.Round(f, 2));
 
                 try
                 {
-                    sevenSegmentArray1.Value = rounded + "";
+                    if (f != 0)
+                    sevenSegmentArray1.Value = string.Format("{0:0.00}", f);
                     connectionLBL.Text = "Receiving...";
                 }
                 catch
@@ -150,6 +179,7 @@ namespace USBScaleSoftware
             return hex;
         }
 
+
         string weight = "";
 
         private void UnitCB_SelectedIndexChanged(object sender, EventArgs e)
@@ -157,7 +187,7 @@ namespace USBScaleSoftware
             StopBTN_Click(sender, e);
             weight = unitCB.SelectedItem.ToString();
             weightLBL.Text = weight;
-            //readBTN_Click(sender, e);
+            readBTN_Click(sender, e);
         }
 
         private void MetroToggle1_CheckedChanged(object sender, EventArgs e)
