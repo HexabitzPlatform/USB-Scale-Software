@@ -71,14 +71,15 @@ namespace USBScaleSoftware
 
             HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
 
-            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
-            AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
+            //DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
+            //AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
 
-            try { Port.Open(); } catch { }
-            try { Port.Write(AllBuffer, 0, AllBuffer.Length); } catch { MessageBox.Show("Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            try { Port.Close(); } catch { }
+            //try { Port.Open(); } catch { }
+            //try { Port.Write(AllBuffer, 0, AllBuffer.Length); } catch { MessageBox.Show("Connection Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            //try { Port.Close(); } catch { }
 
-            HexInter.SendMessage(Destination, Source, Options, Code, Payload);
+
+            HexInter.SendMessage(Destination, Source, Code, Payload);
 
             Receive();
         }
