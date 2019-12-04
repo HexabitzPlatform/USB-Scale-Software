@@ -48,6 +48,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.channelToggle = new MetroFramework.Controls.MetroToggle();
             this.weightLBL = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.baudRateCB = new MetroFramework.Controls.MetroComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).BeginInit();
             this.SuspendLayout();
@@ -75,7 +77,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(347, 610);
+            this.label4.Location = new System.Drawing.Point(278, 610);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 29);
             this.label4.TabIndex = 47;
@@ -84,7 +86,7 @@
             // COM
             // 
             this.COM.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.COM.Location = new System.Drawing.Point(422, 606);
+            this.COM.Location = new System.Drawing.Point(353, 606);
             this.COM.Name = "COM";
             this.COM.Size = new System.Drawing.Size(60, 36);
             this.COM.TabIndex = 46;
@@ -336,11 +338,45 @@
             this.weightLBL.TabIndex = 61;
             this.weightLBL.Text = "Gram";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(429, 610);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(131, 29);
+            this.label8.TabIndex = 63;
+            this.label8.Text = "Baud Rate:";
+            // 
+            // baudRateCB
+            // 
+            this.baudRateCB.FormattingEnabled = true;
+            this.baudRateCB.ItemHeight = 24;
+            this.baudRateCB.Items.AddRange(new object[] {
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "19200",
+            "38400",
+            "57600",
+            "115200",
+            "230400",
+            "460800",
+            "921600"});
+            this.baudRateCB.Location = new System.Drawing.Point(566, 606);
+            this.baudRateCB.Name = "baudRateCB";
+            this.baudRateCB.Size = new System.Drawing.Size(122, 30);
+            this.baudRateCB.TabIndex = 64;
+            this.baudRateCB.UseSelectable = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(956, 658);
+            this.Controls.Add(this.baudRateCB);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.weightLBL);
             this.Controls.Add(this.channelToggle);
             this.Controls.Add(this.label7);
@@ -394,5 +430,7 @@
         private System.Windows.Forms.Label label7;
         private MetroFramework.Controls.MetroToggle channelToggle;
         private System.Windows.Forms.Label weightLBL;
+        private System.Windows.Forms.Label label8;
+        private MetroFramework.Controls.MetroComboBox baudRateCB;
     }
 }

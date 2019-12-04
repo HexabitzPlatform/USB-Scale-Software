@@ -1,0 +1,10 @@
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\bin\Debug\ArrayMessaging.exe.config
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\bin\Debug\ArrayMessaging.exe
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\bin\Debug\ArrayMessaging.pdb
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.Form1.resources
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.Properties.Resources.resources
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.csproj.GenerateResource.cache
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.csproj.CoreCompileInputs.cache
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.csproj.CopyComplete
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.exe
+D:\Work\Clients\Hexabitz\HardwareProjects\ArrayMessaging\obj\Debug\ArrayMessaging.pdb

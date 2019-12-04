@@ -23,13 +23,14 @@ namespace USBScaleSoftware
         public Form1()
         {
             InitializeComponent();
-            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            baudRateCB.SelectedIndex = 10;
+            Port = new SerialPort("COM" + COM.Value, int.Parse(baudRateCB.SelectedItem.ToString()), Parity.None, 8, StopBits.One);
         }
 
         private void readBTN_Click(object sender, EventArgs e)
         {
             Port.Dispose();
-            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Port = new SerialPort("COM" + COM.Value, int.Parse(baudRateCB.SelectedItem.ToString()), Parity.None, 8, StopBits.One);
             Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STREAM_PORT_GRAM; // default is gram reading
             switch (unitCB.SelectedItem)
             {
@@ -69,7 +70,7 @@ namespace USBScaleSoftware
                             module};
 
 
-            HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
+            HexaInterface HexInter = new HexaInterface(COM.Value.ToString(), int.Parse(baudRateCB.SelectedItem.ToString()));
 
             //DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
             //AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
@@ -107,10 +108,10 @@ namespace USBScaleSoftware
         private void StopBTN_Click(object sender, EventArgs e)
         {
             Port.Dispose();
-            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Port = new SerialPort("COM" + COM.Value, int.Parse(baudRateCB.SelectedItem.ToString()), Parity.None, 8, StopBits.One);
             Code = (int)HexaInterface.Message_Codes.CODE_H26R0_STOP;
 
-            HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
+            HexaInterface HexInter = new HexaInterface(COM.Value.ToString(), int.Parse(baudRateCB.SelectedItem.ToString()));
             byte[] Payload = new byte[0];
             DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
             AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
