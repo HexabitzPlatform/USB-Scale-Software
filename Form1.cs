@@ -88,7 +88,7 @@ namespace USBScaleSoftware
         private void ZeroBTN_Click(object sender, EventArgs e)
         {
             Port.Dispose();
-            Port = new SerialPort("COM" + COM.Value, 921600, Parity.None, 8, StopBits.One);
+            Port = new SerialPort("COM" + COM.Value, int.Parse(baudRateCB.SelectedItem.ToString()), Parity.None, 8, StopBits.One);
             Code = (int)HexaInterface.Message_Codes.CODE_H26R0_ZEROCAL;
 
             //HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
