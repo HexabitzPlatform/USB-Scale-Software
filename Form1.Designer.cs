@@ -383,11 +383,6 @@
             this.sourceID_N.Name = "sourceID_N";
             this.sourceID_N.Size = new System.Drawing.Size(60, 36);
             this.sourceID_N.TabIndex = 102;
-            this.sourceID_N.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
             this.sourceID_N.ValueChanged += new System.EventHandler(this.SourceID_N_ValueChanged);
             // 
             // label10
@@ -409,7 +404,7 @@
             this.destinationID_N.Size = new System.Drawing.Size(60, 36);
             this.destinationID_N.TabIndex = 100;
             this.destinationID_N.Value = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
