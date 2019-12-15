@@ -50,8 +50,14 @@
             this.weightLBL = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.baudRateCB = new MetroFramework.Controls.MetroComboBox();
+            this.sourceID_N = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.destinationID_N = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sourceID_N)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.destinationID_N)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -163,7 +169,7 @@
             // metroToggle1
             // 
             this.metroToggle1.FontSize = MetroFramework.MetroLinkSize.Medium;
-            this.metroToggle1.Location = new System.Drawing.Point(637, 246);
+            this.metroToggle1.Location = new System.Drawing.Point(737, 246);
             this.metroToggle1.Name = "metroToggle1";
             this.metroToggle1.Size = new System.Drawing.Size(92, 34);
             this.metroToggle1.TabIndex = 51;
@@ -200,7 +206,7 @@
             // stopBTN
             // 
             this.stopBTN.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.stopBTN.Location = new System.Drawing.Point(622, 471);
+            this.stopBTN.Location = new System.Drawing.Point(624, 471);
             this.stopBTN.Name = "stopBTN";
             this.stopBTN.Size = new System.Drawing.Size(205, 73);
             this.stopBTN.Style = MetroFramework.MetroColorStyle.Red;
@@ -221,7 +227,7 @@
             "Pounds"});
             this.unitCB.Location = new System.Drawing.Point(117, 370);
             this.unitCB.Name = "unitCB";
-            this.unitCB.Size = new System.Drawing.Size(207, 30);
+            this.unitCB.Size = new System.Drawing.Size(161, 30);
             this.unitCB.TabIndex = 55;
             this.unitCB.UseSelectable = true;
             this.unitCB.SelectedIndexChanged += new System.EventHandler(this.UnitCB_SelectedIndexChanged);
@@ -310,7 +316,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.label7.Location = new System.Drawing.Point(496, 375);
+            this.label7.Location = new System.Drawing.Point(496, 302);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(133, 29);
             this.label7.TabIndex = 59;
@@ -319,7 +325,7 @@
             // channelToggle
             // 
             this.channelToggle.FontSize = MetroFramework.MetroLinkSize.Medium;
-            this.channelToggle.Location = new System.Drawing.Point(637, 370);
+            this.channelToggle.Location = new System.Drawing.Point(737, 297);
             this.channelToggle.Name = "channelToggle";
             this.channelToggle.Size = new System.Drawing.Size(92, 34);
             this.channelToggle.TabIndex = 60;
@@ -370,11 +376,65 @@
             this.baudRateCB.TabIndex = 64;
             this.baudRateCB.UseSelectable = true;
             // 
+            // sourceID_N
+            // 
+            this.sourceID_N.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.sourceID_N.Location = new System.Drawing.Point(769, 401);
+            this.sourceID_N.Name = "sourceID_N";
+            this.sourceID_N.Size = new System.Drawing.Size(60, 36);
+            this.sourceID_N.TabIndex = 102;
+            this.sourceID_N.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.sourceID_N.ValueChanged += new System.EventHandler(this.SourceID_N_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.label10.Location = new System.Drawing.Point(498, 404);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(212, 29);
+            this.label10.TabIndex = 101;
+            this.label10.Text = "Source Module ID:";
+            // 
+            // destinationID_N
+            // 
+            this.destinationID_N.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.destinationID_N.Location = new System.Drawing.Point(769, 348);
+            this.destinationID_N.Name = "destinationID_N";
+            this.destinationID_N.Size = new System.Drawing.Size(60, 36);
+            this.destinationID_N.TabIndex = 100;
+            this.destinationID_N.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.destinationID_N.ValueChanged += new System.EventHandler(this.DestinationID_N_ValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.label9.Location = new System.Drawing.Point(498, 353);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(255, 29);
+            this.label9.TabIndex = 99;
+            this.label9.Text = "Destination Module ID:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(956, 658);
+            this.Controls.Add(this.sourceID_N);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.destinationID_N);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.baudRateCB);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.weightLBL);
@@ -404,6 +464,8 @@
             this.Text = "USB Scale Software";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.COM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sourceID_N)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.destinationID_N)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -432,5 +494,9 @@
         private System.Windows.Forms.Label weightLBL;
         private System.Windows.Forms.Label label8;
         private MetroFramework.Controls.MetroComboBox baudRateCB;
+        private System.Windows.Forms.NumericUpDown sourceID_N;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown destinationID_N;
+        private System.Windows.Forms.Label label9;
     }
 }

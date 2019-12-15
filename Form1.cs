@@ -13,8 +13,7 @@ namespace USBScaleSoftware
 
         SerialPort Port;
         uint period, time;
-        byte Destination = 0x01;
-        byte Source = 0x00;
+        byte DestinationID, SourceID;
         byte Options = 0x22;
         byte channel = 0x01;
         int Code;
@@ -80,7 +79,7 @@ namespace USBScaleSoftware
             //try { Port.Close(); } catch { }
 
 
-            HexInter.SendMessage(Destination, Source, Code, Payload);
+            HexInter.SendMessage(DestinationID, SourceID, Code, Payload);
 
             Receive();
         }
@@ -94,7 +93,7 @@ namespace USBScaleSoftware
             //HexaInterface HexInter = new HexaInterface(COM.Value.ToString());
             byte[] Payload = { channel };
 
-            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
+            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(DestinationID, SourceID, Options, Code, Payload);
             AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
 
             try { Port.Open(); } catch { }
@@ -113,7 +112,7 @@ namespace USBScaleSoftware
 
             HexaInterface HexInter = new HexaInterface(COM.Value.ToString(), int.Parse(baudRateCB.SelectedItem.ToString()));
             byte[] Payload = new byte[0];
-            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(Destination, Source, Options, Code, Payload);
+            DOT_NET_COMS_LIB.Message Buff = new DOT_NET_COMS_LIB.Message(DestinationID, SourceID, Options, Code, Payload);
             AllBuffer = Buff.GetAll();  // We get the whole buffer bytes to be sent to the Hexabitz modules.
 
             // Here we call the platform sending protocol.
@@ -198,6 +197,17 @@ namespace USBScaleSoftware
                 timeTB.Enabled = false;
             else
                 timeTB.Enabled = true;
+        }
+
+        private void DestinationID_N_ValueChanged(object sender, EventArgs e)
+        {
+            DestinationID = (byte)destinationID_N.Value;
+
+        }
+
+        private void SourceID_N_ValueChanged(object sender, EventArgs e)
+        {
+            SourceID = (byte)sourceID_N.Value;
         }
 
         private void ChannelToggle_CheckedChanged(object sender, EventArgs e)
